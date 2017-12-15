@@ -1,3 +1,4 @@
+let cc = window.cc;
 cc.VERSION = 20161227;
 let URL = "http://192.168.54.11:9000";
 
@@ -22,7 +23,7 @@ export default {
       str += k + "=" + data[k];
     }
     if (extraUrl == null) {
-      extraUrl = HTTP.url;
+      extraUrl = this.url;
     }
     var requestURL = extraUrl + path + encodeURI(str);
     console.log("RequestURL:" + requestURL);

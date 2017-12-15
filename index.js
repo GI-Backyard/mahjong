@@ -1,5 +1,16 @@
-import http from './src/http.js';
-import net from './src/net.js';
+let cc = window.cc;
+import director from './src/director';
+import http from './src/http';
+import net from './src/net';
+import global from './src/global';
+import urlParse from './src/urlParse';
+import waitingConnection from './src/waitingConnection';
+
+import userMgr from './src/userMgr';
+import gameNetMgr from './src/gameNetMgr';
+import mjutil from './src/mjutil';
+import languageMgr from './src/languageMgr';
+import audioMgr from './src/audioMgr';
 
 // components
 import StartComponent from './src/components/start';
@@ -10,42 +21,44 @@ class Game {
   }
 
   init() {
+    cc.args = urlParse();
+
+    cc.sys = cc.sys || {};
+    
+    cc.sys.localStorage = localStorage;
+    cc.director = director;
+    // init localStorage
+
+
     cc.vv = {};
-    // hack code
-    // cc.vv.global = require("Global");
+
+    cc.vv.global = global;
     cc.vv.http = http;
     cc.vv.net = net;
+    cc.vv.wc = waitingConnection;
 
+    // hack code
+    cc.vv.SI = {};
 
-    // todo from here
-    // var UserMgr = require("UserMgr");
-    // cc.vv.userMgr = new UserMgr();
+    cc.vv.userMgr = userMgr;
+    cc.vv.gameNetMgr = gameNetMgr;
+    gameNetMgr.initHandlers();
+    cc.vv.languageMgr = languageMgr;
+    languageMgr.init();
+    cc.vv.audioMgr = audioMgr;
+    audioMgr.init();
 
-    // var GameNetMgr = require("GameNetMgr");
-    // cc.vv.gameNetMgr = new GameNetMgr();
-    // cc.vv.gameNetMgr.initHandlers();
+    cc.vv.mjutil = mjutil;
 
+    // do not need it
     // var VoiceMgr = require("VoiceMgr");
     // cc.vv.voiceMgr = new VoiceMgr();
     // cc.vv.voiceMgr.init();
 
-    // var AudioMgr = require("AudioMgr");
-    // cc.vv.audioMgr = new AudioMgr();
-    // cc.vv.audioMgr.init();
-
     // var Utils = require("Utils");
     // cc.vv.utils = new Utils();
 
-    // var MJUtil = require("MJUtil");
-    // cc.vv.mjutil = new MJUtil();
-
-    // var LanguageMgr = require('LanguageMgr');
-    // cc.vv.languageMgr = new LanguageMgr();
-    // cc.vv.languageMgr.init();
-
-    // cc.args = urlParse();
-
-    app.registerClass('game.start', StartComponent);
+    this.app.registerClass('game.start', StartComponent);
   }
 }
 

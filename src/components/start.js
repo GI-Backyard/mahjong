@@ -1,3 +1,5 @@
+let cc = window.cc;
+
 export default class StartComponent extends cc.ScriptComponent {
   constructor() {
     super();

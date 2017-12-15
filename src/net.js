@@ -1,4 +1,5 @@
-// for native
+let cc = window.cc;
+
 // if(window.io == null){
 //     window.io = require("socket-io");
 // }
@@ -127,7 +128,7 @@ export default {
     if (this.sio && this.sio.connected) {
       if (data != null && (typeof (data) == "object")) {
         data = JSON.stringify(data);
-        //console.log(data);              
+        //console.log(data);
       }
       this.sio.emit(event, data);
     }

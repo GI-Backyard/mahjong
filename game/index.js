@@ -11,14 +11,12 @@ const { resl, path } = cc;
 
 let assetsDir = './assets/mahjong-unity';
 let startScene = 'start';
-let startComponent = 'game.start';
 
-// init app
-let app = new cc.App(canvas);
-app.resize();
-app.run();
-let game = new mahjong.Game(app);
+// init game
+let game = new mahjong.Game(canvas);
+game.resize();
 game.init();
+game.run();
 
 // todo move this to game
 resl({
@@ -46,16 +44,14 @@ resl({
         info.urls[item] = path.join(assetsDir, info.urls[item]);
       }
 
-      app.assets.registerAsset(uuid, info);
+      game.assets.registerAsset(uuid, info);
     }
 
     cc.utils.parseLevel(
-      app,
+      game,
       sceneJson,
       (err, level) => {
-        app.loadLevel(level);
-        let node = app.find('3d');
-        node.addComp(startComponent);
+        game.loadLevel(level);
       }
     );
   }

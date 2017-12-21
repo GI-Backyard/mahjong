@@ -14,10 +14,12 @@ import audioMgr from './src/audioMgr';
 
 // components
 import StartComponent from './src/components/start';
+import LoadingComponent from './src/components/loading';
+import LoginComponent from './src/components/login';
 
-class Game {
-  constructor(app) {
-    this.app = app;
+class Game extends cc.App {
+  constructor(canvas, opts) {
+    super(canvas, opts);
   }
 
   init() {
@@ -58,7 +60,9 @@ class Game {
     // var Utils = require("Utils");
     // cc.vv.utils = new Utils();
 
-    this.app.registerClass('game.start', StartComponent);
+    this.registerClass('game.start', StartComponent);
+    this.registerClass('game.loading', LoadingComponent);
+    this.registerClass('game.login', LoginComponent);
   }
 }
 

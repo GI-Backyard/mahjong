@@ -20,7 +20,7 @@ let moduleName = 'mahjong';
 fsJetpack.dir(dest, { empty: true });
 
 module.exports = {
-  entry: './index.js',
+  entry: './game.js',
   targets: [
     { dest: `${dest}/${file}.dev.js`, format: 'iife' },
     { dest: `${dest}/${file}.js`, format: 'cjs' },

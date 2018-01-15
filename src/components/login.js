@@ -1,4 +1,4 @@
-let cc = window.cc;
+// let cc = window.cc;
 
 export default class LoginComponent extends cc.ScriptComponent {
   constructor() {
@@ -17,7 +17,7 @@ export default class LoginComponent extends cc.ScriptComponent {
     cc.vv.http.url = cc.vv.http.master_url;
     cc.vv.net.addHandler('push_need_create_role', function () {
       console.log("onLoad:push_need_create_role");
-      cc.director.loadScene("createrole");
+      cc.game.loadScene("createrole");
     });
 
   }

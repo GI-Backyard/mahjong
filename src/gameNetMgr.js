@@ -1,5 +1,5 @@
 
-let cc = window.cc;
+// let cc = window.cc;
 
 export default {
   dataEventHandler: null,
@@ -257,7 +257,7 @@ export default {
 
     cc.vv.net.addHandler("login_finished", function (data) {
       console.log("login_finished");
-      cc.director.loadScene("mjgame", function () {
+      cc.game.loadScene("mjgame", function () {
         cc.vv.wc.hide();
         cc.vv.net.ping();
       });
@@ -296,7 +296,7 @@ export default {
       self.dissoveData = null;
       if (self.roomId == null) {
         cc.vv.wc.show('正在返回游戏大厅');
-        cc.director.loadScene("hall_child");
+        cc.game.loadScene("hall");
       }
       else {
         if (self.isOver == false) {
@@ -861,14 +861,14 @@ export default {
     cc.vv.net.test(function (ret) {
       if (ret) {
         cc.vv.gameNetMgr.reset();
-        //cc.director.loadScene('hall');
+        //cc.game.loadScene('hall');
         var roomId = cc.vv.userMgr.oldRoomId;
         if (roomId != null) {
           cc.vv.userMgr.oldRoomId = null;
           cc.vv.userMgr.enterRoom(roomId, function (ret) {
             if (ret.errcode != 0) {
               cc.vv.gameNetMgr.roomId = null;
-              cc.director.loadScene('hall_child');
+              cc.game.loadScene('hall');
             }
           });
         }

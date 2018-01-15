@@ -1,4 +1,4 @@
-let cc = window.cc;
+// let cc = window.cc;
 
 export default {
   loadScene: function(sceneName, callback) {

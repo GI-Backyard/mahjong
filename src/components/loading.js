@@ -1,4 +1,4 @@
-let cc = window.cc;
+// let cc = window.cc;
 
 export default class LoadingComponent extends cc.ScriptComponent {
   constructor() {
@@ -22,7 +22,7 @@ export default class LoadingComponent extends cc.ScriptComponent {
     this._canvans.enabled = true;
     this.updateLoadingProgress();
     let textNode = app.find('Text', this._canvans);
-    this._loadingProgressText = textNode && textNode.getComp('Label');
+    this._loadingProgressText = textNode && textNode.getComp('Text');
     this._loginNode = app.find('logic/login');
   }
 

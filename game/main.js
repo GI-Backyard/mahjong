@@ -10,10 +10,11 @@ view.appendChild(canvas);
 const { resl, path } = cc;
 
 let assetsDir = './assets/mahjong-unity';
-let startScene = 'start';
+let assetsFile = 'assets.json';
+let scenes = './assets/scenes.json';
 
 // init game
-let game = new mahjong.Game(canvas);
+let game = cc.game = new mahjong.Game(canvas);
 game.resize();
 game.init();
 game.run();
@@ -24,18 +25,18 @@ resl({
     assetInfos: {
       type: 'text',
       parser: JSON.parse,
-      src: `${assetsDir}/assets.json`
+      src: `${assetsDir}/${assetsFile}`
     },
 
-    scene: {
+    scenes: {
       type: 'text',
       parser: JSON.parse,
-      src: `${assetsDir}/${startScene}.json`
+      src: scenes
     },
   },
 
   onDone(data) {
-    const sceneJson = data.scene;
+    const sceneJson = data.scenes;
     const assetInfos = data.assetInfos;
 
     for (let uuid in assetInfos) {
@@ -46,13 +47,7 @@ resl({
 
       game.assets.registerAsset(uuid, info);
     }
-
-    cc.utils.parseLevel(
-      game,
-      sceneJson,
-      (err, level) => {
-        game.loadLevel(level);
-      }
-    );
+    game.setScenes(sceneJson);
+    game.loadScene('start');
   }
 });

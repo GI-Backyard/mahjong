@@ -1,4 +1,4 @@
-let cc = window.cc;
+// let cc = window.cc;
 
 // if(window.io == null){
 //     window.io = require("socket-io");

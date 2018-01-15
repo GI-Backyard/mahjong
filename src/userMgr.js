@@ -1,4 +1,4 @@
-let cc = window.cc;
+// let cc = window.cc;
 
 export default {
   account: null,
@@ -59,7 +59,7 @@ export default {
             return;
           }
 
-          cc.director.loadScene("createrole");
+          cc.game.loadScene("createrole");
         }
         else {
           console.log(ret);
@@ -76,7 +76,7 @@ export default {
           self.invitor = ret.invitor,
             self.maxShareAwards = ret.max_share_awards;
           self.dealerState = ret.dealer_state;
-          cc.director.loadScene("hall_child");
+          cc.game.loadScene("hall");
         }
       }
     }.bind(this);

@@ -2,7 +2,7 @@
   "name": "mahjong",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "game.js",
   "scripts": {
     "server": "http-server ./game",
     "build": "npm run build:dev && npm run build:min",

@@ -1,4 +1,4 @@
-let cc = window.cc;
+// let cc = window.cc;
 
 export default class StartComponent extends cc.ScriptComponent {
   constructor() {
@@ -41,7 +41,7 @@ export default class StartComponent extends cc.ScriptComponent {
     this._splash = app.find('start_scene/splash');
     this._canvas = app.find('start_canvas');
     let nodeText = app.find('Text', this._canvas);
-    this._infoText = nodeText && nodeText.getComp('Label');
+    this._infoText = nodeText && nodeText.getComp('Text');
     this._loadingNode = app.find('logic/loading');
 
     setTimeout(() => {

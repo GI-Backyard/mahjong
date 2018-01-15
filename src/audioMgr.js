@@ -1,4 +1,4 @@
-let cc = window.cc;
+// let cc = window.cc;
 export default {
   bgmVolume: 1.0,
   sfxVolume: 1.0,

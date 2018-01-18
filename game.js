@@ -21,6 +21,9 @@ import StartComponent from './src/components/start';
 import LoadingComponent from './src/components/loading';
 import LoginComponent from './src/components/login';
 import CreateRoleSexComponent from './src/components/createrolesex';
+import HallComponent from './src/components/hall';
+import createRoomComponent from './src/components/createRoom';
+import joinRoomComponent from './src/components/joinRoom';
 
 let color = color3.new(0.5, 0.5, 0.0);
 let a = vec3.create();
@@ -128,6 +131,9 @@ class Game extends cc.App {
     this.registerClass('game.loading', LoadingComponent);
     this.registerClass('game.login', LoginComponent);
     this.registerClass('game.createrolesex', CreateRoleSexComponent);
+    this.registerClass('game.hall', HallComponent);
+    this.registerClass('game.createRoom', createRoomComponent);
+    this.registerClass('game.joinRoom', joinRoomComponent);
   }
 
   _debugWidgets() {

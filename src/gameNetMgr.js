@@ -880,7 +880,7 @@ export default {
   },
 
   isGamePlaying: function () {
-    var isGamePlaying = cc.vv.gameNetMgr.roomId && !cc.vv.gameNetMgr.isOver && !cc.vv.replayMgr.isReplay();
+    var isGamePlaying = cc.vv.gameNetMgr.roomId && !cc.vv.gameNetMgr.isOver && (cc.vv.replayMgr && !cc.vv.replayMgr.isReplay());
     return isGamePlaying;
   },
   // called every frame, uncomment this function to activate update callback

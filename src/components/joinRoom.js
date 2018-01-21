@@ -1,9 +1,12 @@
 // let cc = window.cc;
-
+const _inputMsg = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const _maxCharNum = 6;
 export default class joinRoomComponent extends cc.ScriptComponent {
   constructor() {
     super();
     this._diag = null;
+    this._chars = [];
+    this._nums = new Array(_maxCharNum);
   }
 
   start() {
@@ -15,6 +18,34 @@ export default class joinRoomComponent extends cc.ScriptComponent {
     });
 
     this._diag = app.find(this.diag);
+
+    this._registerBtnEvent(app, this.btn_0, '0');
+    this._registerBtnEvent(app, this.btn_1, '1');
+    this._registerBtnEvent(app, this.btn_2, '2');
+    this._registerBtnEvent(app, this.btn_3, '3');
+    this._registerBtnEvent(app, this.btn_4, '4');
+    this._registerBtnEvent(app, this.btn_5, '5');
+    this._registerBtnEvent(app, this.btn_6, '6');
+    this._registerBtnEvent(app, this.btn_7, '7');
+    this._registerBtnEvent(app, this.btn_8, '8');
+    this._registerBtnEvent(app, this.btn_9, '9');
+
+    this._registerBtnEvent(app, this.btn_del, 'del');
+    this._registerBtnEvent(app, this.btn_clear, 'clear');
+
+    let _locateNumber = (index, name) => {
+      let en = app.find(name);
+      let text = en && en.getComp('Text');
+      this._nums[index] = text;
+    }
+
+    _locateNumber(0, this.num_0);
+    _locateNumber(1, this.num_1);
+    _locateNumber(2, this.num_2);
+    _locateNumber(3, this.num_3);
+    _locateNumber(4, this.num_4);
+    _locateNumber(5, this.num_5);
+    this._refreshRoomNumber();
   }
 
   openDiag() {
@@ -27,6 +58,49 @@ export default class joinRoomComponent extends cc.ScriptComponent {
     if (this._diag) {
       this._diag.enabled = false;
     }
+  }
+
+  _registerBtnEvent(app, name, msg) {
+    let en = app.find(name);
+    let btn = en && en.getComp('Button');
+    btn._clickListeners.push(() => {
+      this._onBtnMsg(msg);
+    });
+  }
+
+  _onBtnMsg(msg) {
+    if (msg === 'clear') {
+      this._chars.length = 0;
+      this._refreshRoomNumber();
+    } else if (msg === 'del') {
+      if (this._chars.length > 0) {
+        this._chars.splice(this._chars.length - 1, 1);
+        this._refreshRoomNumber();
+      }
+    } else {
+      if (_inputMsg.indexOf(msg) !== -1 && this._chars.length < _maxCharNum) {
+        this._chars.push(msg);
+        this._refreshRoomNumber();
+        if (this._chars.length === _maxCharNum) {
+          this._tryEnterRoom();
+        }
+      }
+    }
+  }
+
+  _refreshRoomNumber() {
+    for (let i = 0; i < _maxCharNum; ++i) {
+      this._nums[i].text = this._chars[i] || '';
+    }
+  }
+
+  _tryEnterRoom() {
+    // parse room id
+    let roomId = 0;
+    for (let i = 0; i < _maxCharNum; ++i) {
+      roomId += parseInt(this._chars[i]) * Math.pow(10, _maxCharNum - i - 1);
+    }
+    console.warn(`try to enter room ${roomId}.`);
   }
 
   update() {

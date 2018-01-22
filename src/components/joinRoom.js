@@ -100,7 +100,33 @@ export default class joinRoomComponent extends cc.ScriptComponent {
     for (let i = 0; i < _maxCharNum; ++i) {
       roomId += parseInt(this._chars[i]) * Math.pow(10, _maxCharNum - i - 1);
     }
-    console.warn(`try to enter room ${roomId}.`);
+    cc.vv.userMgr.enterRoom(roomId,
+      (ret) => {
+        if (ret.errcode === 0) {
+          // this.node.active = false;
+          this.closeDiag();
+        }
+        else {
+          let content = '网络错误，请重试';
+          if (ret.errcode == -2) {
+            content = "房间[" + roomId + "]不存在，请重新输入!";
+          }
+          if (ret.errcode == 4) {
+            content = "房间[" + roomId + "]已满!";
+          }
+          else if (ret.errcode == 5) {
+            content = "钻石不足，加入房间失败";
+          }
+          else if (ret.errcode == 6) {
+            content = "防作弊系统提醒您\n\n距离过近，无法加入游戏";
+          }
+          // cc.vv.alert.show("提示", content);
+          console.warn(`ERROR: ${content}`);
+          // clear all
+          this._onBtnMsg('clear');
+        }
+      }
+    );
   }
 
   update() {

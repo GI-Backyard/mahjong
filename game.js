@@ -24,6 +24,22 @@ import CreateRoleSexComponent from './src/components/createrolesex';
 import HallComponent from './src/components/hall';
 import createRoomComponent from './src/components/createRoom';
 import joinRoomComponent from './src/components/joinRoom';
+import MJGameComponent from './src/components/mjGame';
+import RoomWaiting from './src/components/roomWaiting';
+import SeatComponent from './src/components/seat';
+
+let _componentRegitstry = {
+  'game.start': StartComponent,
+  'game.loading': LoadingComponent,
+  'game.login': LoginComponent,
+  'game.createrolesex': CreateRoleSexComponent,
+  'game.hall': HallComponent,
+  'game.createRoom': createRoomComponent,
+  'game.joinRoom': joinRoomComponent,
+  'game.mjGame': MJGameComponent,
+  'game.roomWaiting': RoomWaiting,
+  'game.seat': SeatComponent,
+};
 
 let color = color3.new(0.5, 0.5, 0.0);
 let a = vec3.create();
@@ -127,13 +143,19 @@ class Game extends cc.App {
     // var Utils = require("Utils");
     // cc.vv.utils = new Utils();
 
-    this.registerClass('game.start', StartComponent);
-    this.registerClass('game.loading', LoadingComponent);
-    this.registerClass('game.login', LoginComponent);
-    this.registerClass('game.createrolesex', CreateRoleSexComponent);
-    this.registerClass('game.hall', HallComponent);
-    this.registerClass('game.createRoom', createRoomComponent);
-    this.registerClass('game.joinRoom', joinRoomComponent);
+    for (let key in _componentRegitstry) {
+      this.registerClass(key, _componentRegitstry[key]);
+    }
+    // this.registerClass('game.start', StartComponent);
+    // this.registerClass('game.loading', LoadingComponent);
+    // this.registerClass('game.login', LoginComponent);
+    // this.registerClass('game.createrolesex', CreateRoleSexComponent);
+    // this.registerClass('game.hall', HallComponent);
+    // this.registerClass('game.createRoom', createRoomComponent);
+    // this.registerClass('game.joinRoom', joinRoomComponent);
+    // this.registerClass('game.mjGame', MJGameComponent);
+    // this.registerClass('game.roomWaiting', RoomWaiting);
+    // this.registerClass('ga')
   }
 
   _debugWidgets() {

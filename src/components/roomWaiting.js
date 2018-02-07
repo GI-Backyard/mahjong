@@ -67,7 +67,7 @@ export default class RoomWaiting extends cc.ScriptComponent {
   }
 
   initView() {
-    let app = this._engine;
+    let app = this._app;
     let seatsIndices = ['me', 'right', 'top', 'left'];
     let waitingSeats = app.find(this.waitingSeats);
     let gameSeats = app.find(this.mjGameSeats);
@@ -131,9 +131,9 @@ export default class RoomWaiting extends cc.ScriptComponent {
     // nothing to do here now, maybe add voice control
   }
 
-  update() {
-    let dt = this._engine.deltaTime;
-    // todo, update time label show
+  tick() {
+    let dt = this._app.deltaTime;
+    // todo, tick time label show
   }
 
   _playVoice() {

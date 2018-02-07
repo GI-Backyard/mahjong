@@ -10,7 +10,7 @@ export default class joinRoomComponent extends cc.ScriptComponent {
   }
 
   start() {
-    let app = this._engine;
+    let app = this._app;
     let en = app.find(this.closeBtn);
     let btn = en && en.getComp('Button');
     btn._clickListeners.push(() => {
@@ -90,7 +90,7 @@ export default class joinRoomComponent extends cc.ScriptComponent {
 
   _refreshRoomNumber() {
     for (let i = 0; i < _maxCharNum; ++i) {
-      this._nums[i].text = this._chars[i] || '';
+      this._nums[i].text = this._chars[i] || ' ';
     }
   }
 
@@ -129,6 +129,6 @@ export default class joinRoomComponent extends cc.ScriptComponent {
     );
   }
 
-  update() {
+  tick() {
   }
 }

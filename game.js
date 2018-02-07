@@ -27,6 +27,7 @@ import joinRoomComponent from './src/components/joinRoom';
 import MJGameComponent from './src/components/mjGame';
 import RoomWaiting from './src/components/roomWaiting';
 import SeatComponent from './src/components/seat';
+import MahJongMgr from './src/components/mahjongMgr';
 
 let _componentRegitstry = {
   'game.start': StartComponent,
@@ -39,6 +40,7 @@ let _componentRegitstry = {
   'game.mjGame': MJGameComponent,
   'game.roomWaiting': RoomWaiting,
   'game.seat': SeatComponent,
+  'game.mahjongMgr': MahJongMgr,
 };
 
 let color = color3.new(0.5, 0.5, 0.0);

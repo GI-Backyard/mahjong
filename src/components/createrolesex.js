@@ -56,7 +56,7 @@ export default class CreateRoleSexComponent extends cc.ScriptComponent {
   }
 
   _applyRefs() {
-    let app = this._engine;
+    let app = this._app;
     // apply male toggle
     let en = app.find(this.maleToggle);
     this._maleToggle = en && en.getComp('Toggle');

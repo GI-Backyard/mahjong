@@ -17,7 +17,7 @@ export default class LoadingComponent extends cc.ScriptComponent {
   }
 
   start() {
-    let app = this._engine;
+    let app = this._app;
     this._canvans = app.find('loading_canvas');
     this._canvans.enabled = true;
     this.updateLoadingProgress();
@@ -26,7 +26,7 @@ export default class LoadingComponent extends cc.ScriptComponent {
     this._loginNode = app.find('logic/login');
   }
 
-  update() {
+  tick() {
     let time = Date.now();
     if (!this._lastTime) {
       this._lastTime = time;

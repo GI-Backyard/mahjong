@@ -247,7 +247,7 @@ export default class SeatComponent extends cc.ScriptComponent {
   }
 
   // called every frame, uncomment this function to activate update callback
-  update(dt) {
+  tick(dt) {
     if (this._lastChatTime > 0) {
       this._lastChatTime -= dt;
       if (this._lastChatTime < 0) {

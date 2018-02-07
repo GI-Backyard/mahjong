@@ -35,7 +35,7 @@ export default class StartComponent extends cc.ScriptComponent {
   }
 
   start() {
-    let app = this._engine;
+    let app = this._app;
     this._logo = app.find('start_scene/logo');
     this._notice = app.find('start_scene/notice');
     this._splash = app.find('start_scene/splash');

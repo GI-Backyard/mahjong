@@ -6,7 +6,7 @@ export default class LoginComponent extends cc.ScriptComponent {
   }
 
   start() {
-    let app = this._engine;
+    let app = this._app;
     this._canvas = app.find('login_canvas');
     this._canvas.enabled = true;
     let guestLoginNode = app.find('Image', this._canvas);

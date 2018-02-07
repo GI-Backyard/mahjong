@@ -8,7 +8,7 @@ export default class HallComponent extends cc.ScriptComponent {
   }
 
   start() {
-    let app = this._engine;
+    let app = this._app;
     this._createRoomDiag = app.find(this.createRoomDiag);
     this._joinRoomDiag = app.find(this.joinRoomDiag);
 
@@ -31,6 +31,6 @@ export default class HallComponent extends cc.ScriptComponent {
     });
   }
 
-  update() {
+  tick() {
   }
 }

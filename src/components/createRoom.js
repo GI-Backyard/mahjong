@@ -63,7 +63,7 @@ export default class createRoomComponent extends cc.ScriptComponent {
   }
 
   start() {
-    let app = this._engine;
+    let app = this._app;
     let en = app.find(this.closeBtn);
     let btn = en && en.getComp('Button');
     btn._clickListeners.push(() => {
@@ -275,6 +275,6 @@ export default class createRoomComponent extends cc.ScriptComponent {
     }
   }
 
-  update() {
+  tick() {
   }
 }

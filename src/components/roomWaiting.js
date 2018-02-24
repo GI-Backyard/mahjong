@@ -40,11 +40,21 @@ export default class RoomWaiting extends cc.ScriptComponent {
         this._mjSeats[i].refreshXuanPaiState();
       }
     });
-    this._registerCallback(node, 'voice_msg', null);
-    this._registerCallback(node, 'chat_push', null);
-    this._registerCallback(node, 'quick_chat_push', null);
-    this._registerCallback(node, 'emoji_push', null);
-    this._registerCallback(node, 'interactive_emoji_push', null);
+    this._registerCallback(node, 'voice_msg', () => {
+      console.warn('voice_msg is not implemented.');
+    });
+    this._registerCallback(node, 'chat_push', () => {
+      console.warn('chat_push is not implemented.');
+    });
+    this._registerCallback(node, 'quick_chat_push', () => {
+      console.warn('quick_chat_push is not implemented.');
+    });
+    this._registerCallback(node, 'emoji_push', () => {
+      console.warn('emoji_push is not implemented.');
+    });
+    this._registerCallback(node, 'interactive_emoji_push', () => {
+      console.warn('interactive_emoji_push is not implemented.');
+    });
     this._registerCallback(node, 'game_baoting_notify', (data) => {
       data = data.detail;
       let idx = data;

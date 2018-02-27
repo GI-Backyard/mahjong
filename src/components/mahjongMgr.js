@@ -42,6 +42,24 @@ export default class MahJongMgr extends cc.ScriptComponent {
     let app = this._app;
   }
 
+  instantiateBlankMjTile(callback) {
+    let uuid = this['Dragon_Blank'];
+    let app = this._app;
+    app.assets.load(uuid, (err, asset) => {
+      if (err) {
+        callback && callback(err, null);
+      } else {
+        let en = asset.instantiate();
+        if (en) {
+          callback && callback(null, en);
+        } else {
+          callback && callback('tile is not a prefab', null);
+        }
+      }
+    });
+    return null;
+  }
+
   instantiateMjTile(id, callback) {
     let uuid = this[tilesNameTable[id]];
     let app = this._app;

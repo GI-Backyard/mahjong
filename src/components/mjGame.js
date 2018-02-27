@@ -248,10 +248,42 @@ export default class MJGameComponent extends cc.ScriptComponent {
     this._registerSingleEventHandler(node, 'hangang_notify', null);
     this._registerSingleEventHandler(node, 'gang_notify', null);
     this._registerSingleEventHandler(node, 'peng_notify', null);
-    this._registerSingleEventHandler(node, 'game_dingque_finish', null);
+    this._registerSingleEventHandler(node, 'game_dingque_finish', () => {
+      this.initMahjongs();
+    });
     this._registerSingleEventHandler(node, 'guo_result', null);
-    this._registerSingleEventHandler(node, 'guo_notify', null);
-    this._registerSingleEventHandler(node, 'game_chupai_notify', null);
+    this._registerSingleEventHandler(node, 'guo_notify', (data) => {
+      this.hideChupai();
+      this.hideOptions();
+      var seatData = data;
+      //如果是自己，则刷新手牌
+      if (seatData.seatindex == cc.vv.gameNetMgr.seatIndex) {
+        this.initMahjongs();
+      }
+    });
+    this._registerSingleEventHandler(node, 'game_chupai_notify', (data) => {
+      this.hideChupai();
+      var seatData = data.seatData;
+      //如果是自己，则刷新手牌
+
+      if (seatData.seatindex == cc.vv.gameNetMgr.seatIndex) {
+        this.initMahjongs();
+
+      }
+      else {
+        this.initOtherMahjongs(seatData);
+        this.initMopai(seatData.seatindex, null);
+      }
+      this.showChupai();
+      this.initShowTingBear();
+
+      // var audioUrl = cc.vv.mahjongmgr.getAudioURLByMJID(data.detail.pai);
+      // cc.vv.audioMgr.playSFX(audioUrl, seatData.seatindex);
+      //self._keep_out.active = false;
+      //
+      //
+      // cc.vv.audioMgr.playSFX("give.mp3");
+    });
     this._registerSingleEventHandler(node, 'game_over', null);
     this._registerSingleEventHandler(node, 'game_num', () => {
       // todo
@@ -265,8 +297,50 @@ export default class MJGameComponent extends cc.ScriptComponent {
     });
     this._registerSingleEventHandler(node, 'hupai', null);
     this._registerSingleEventHandler(node, 'game_action', null);
-    this._registerSingleEventHandler(node, 'game_mopai', null);
-    this._registerSingleEventHandler(node, 'game_chupai', null);
+    this._registerSingleEventHandler(node, 'game_mopai', (data) => {
+      this.hideChupai();
+      // data = data.detail;
+      var pai = data.pai;
+      var localIndex = cc.vv.gameNetMgr.getLocalIndex(data.seatIndex);
+      if (localIndex == 0) {
+        // var index = 13;
+        // let en = this._myHolds[13];
+        cc.vv.mahjongmgr.instantiateMjTile(pai, (err, entity) => {
+          if (!err && entity) {
+            entity.setParent(this._myHolds[13]);
+            this._myHolds[13].enabled = false;
+            this._myHolds[13].enabled = true;
+            entity.enabled = false;
+            entity.enabled = true;
+          }
+        });
+        // var sprite = self._myMJArr[index];
+        // self.setSpriteFrameByMJID("M_", sprite, pai, index);
+        // sprite.node.mjId = pai;
+        // sprite.bd.active = cc.vv.gameNetMgr.isJing(pai);
+      }
+      // else if (cc.vv.replayMgr.isReplay()) {
+      //   self.initMopai(data.seatIndex, pai);
+      // }
+    });
+    this._registerSingleEventHandler(node, 'game_chupai', (data) => {
+      this.hideChupai();
+      this.checkQueYiMen();
+      // self._keep_out.active = false;
+      if (data.last != cc.vv.gameNetMgr.seatIndex) {
+        if (cc.vv.gameNetMgr.getSelfData().isbaoting) {
+
+        } else {
+
+        }
+        this.initShowTingBear();
+
+      }
+
+      if (/*!cc.vv.replayMgr.isReplay() && */data.turn != cc.vv.gameNetMgr.seatIndex) {
+        this.initMopai(data.turn, -1);
+      }
+    });
     this._registerSingleEventHandler(node, 'game_sync', () => {
       this._initView();
       this._onGameBeign();
@@ -285,6 +359,11 @@ export default class MJGameComponent extends cc.ScriptComponent {
     this._registerSingleEventHandler(node, 'game_holds', () => {
       this.initMahjongs();
     });
+  }
+
+  hideChupai() {
+    // nothing to do here
+    // console.error('mjGame hideChupai not implemented');
   }
 
   _checkIp() {
@@ -404,8 +483,10 @@ export default class MJGameComponent extends cc.ScriptComponent {
     // }
   }
 
+  // 出牌堆
   showChupai() {
-    // var pai = cc.vv.gameNetMgr.chupai;
+    let pai = cc.vv.gameNetMgr.chupai;
+    console.log('chupai ' + pai);
     // if (pai >= 0) {
 
     //   if (cc.vv.gameNetMgr.chupai != -1 && cc.vv.gameNetMgr.gamestart) {//修改8.10
@@ -646,41 +727,46 @@ export default class MJGameComponent extends cc.ScriptComponent {
   }
 
   initMopai(seatIndex, pai) {
-    // var localIndex = cc.vv.gameNetMgr.getLocalIndex(seatIndex);
-    // var side = cc.vv.mahjongmgr.getSide(localIndex);
+    let app = this._app;
+    let localIndex = cc.vv.gameNetMgr.getLocalIndex(seatIndex);
+    let seatsIndices = ['mine', 'right', 'oppo', 'left'];
+    let side = seatsIndices[localIndex];
     // var pre = cc.vv.mahjongmgr.getFoldPre(localIndex);
 
-    // var gameChild = this.node.getChildByName("game");
-    // var sideChild = gameChild.getChildByName(side);
-    // var holds = sideChild.getChildByName("holds");
+    let sideRoot = app.find(side, this._main3D);
+    let sideHolds = app.find("holds", sideRoot);
 
-    // var lastIndex = this.getMJIndex(side, 13);
-    // var nc = holds.children[lastIndex];
+    let lastIndex = 13;
+    let nc = sideHolds.children[lastIndex];
 
     // nc.scaleX = 1.0;
     // nc.scaleY = 1.0;
 
-    // if (pai == null) {
-    //   nc.active = false;
-    // }
-    // else if (pai >= 0) {
-    //   nc.active = true;
-    //   nc.opacity = 255;
-    //   if (localIndex == 0) {
-    //     nc.x = nc._yx;
-    //   }
-    //   var sprite = nc.getComponent(cc.Sprite);
-    //   sprite.spriteFrame = cc.vv.mahjongmgr.getSpriteFrameByMJID(pre, pai);
+    if (pai == null) {
+      nc.enabled = false;
+    }
+    else if (pai >= 0) {
+      nc.enabled = true;
+      console.error('init mopai tile not implemented');
+      // nc.opacity = 255;
+      // if (localIndex == 0) {
+      //   nc.x = nc._yx;
+      // }
+      // todo real tile
+      // var sprite = nc.getComponent(cc.Sprite);
+      // sprite.spriteFrame = cc.vv.mahjongmgr.getSpriteFrameByMJID(pre, pai);
 
-    //   if (sprite.bd) {
-    //     sprite.bd.active = cc.vv.gameNetMgr.isJing(pai);
-    //   }
-    // }
-    // else if (pai != null) {
-    //   nc.active = true;
-    //   var sprite = nc.getComponent(cc.Sprite);
-    //   sprite.spriteFrame = cc.vv.mahjongmgr.getHoldsEmptySpriteFrame(side);
-    // }
+      // if (sprite.bd) {
+      //   sprite.bd.active = cc.vv.gameNetMgr.isJing(pai);
+      // }
+    }
+    else if (pai != null) {
+      nc.enabled = true;
+      console.error('init mopai blank tile not implemented');
+      // var sprite = nc.getComponent(cc.Sprite);
+      // todo empty tile
+      // sprite.spriteFrame = cc.vv.mahjongmgr.getHoldsEmptySpriteFrame(side);
+    }
   }
 
   initEmptySprites(seatIndex) {
@@ -763,6 +849,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     }
   }
 
+  // 统计并且显示听牌张数
   initShowTingBear() {
     // //检查听牌
     // var ddd = cc.vv.gameNetMgr.getSelfData();
@@ -870,6 +957,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     // this.showTingBear();
   }
 
+  // 显示听牌张数
   showTingBear() {
     ////////显示有叫
     // if (this.tingBears.length > 0 && this.tingMode !== null) {

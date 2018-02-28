@@ -29,6 +29,7 @@ import RoomWaiting from './src/components/roomWaiting';
 import SeatComponent from './src/components/seat';
 import DingQueComponent from './src/components/dingque';
 import RoomControlComponent from './src/components/roomControl';
+import GameResultComponent from './src/components/gameresult';
 import MahJongMgr from './src/components/mahjongMgr';
 
 let _componentRegitstry = {
@@ -44,6 +45,7 @@ let _componentRegitstry = {
   'game.seat': SeatComponent,
   'game.dingque': DingQueComponent,
   'game.roomControl': RoomControlComponent,
+  'game.result': GameResultComponent,
   'game.mahjongMgr': MahJongMgr,
 };
 

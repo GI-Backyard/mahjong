@@ -284,7 +284,11 @@ export default class MJGameComponent extends cc.ScriptComponent {
       //
       // cc.vv.audioMgr.playSFX("give.mp3");
     });
-    this._registerSingleEventHandler(node, 'game_over', null);
+
+    this._registerSingleEventHandler(node, 'game_over', () => {
+
+    });
+    
     this._registerSingleEventHandler(node, 'game_num', () => {
       // todo
       // self._gamecount.string = "" + cc.vv.gameNetMgr.numOfGames + "/" + cc.vv.gameNetMgr.maxNumOfGames + "局";

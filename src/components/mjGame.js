@@ -243,7 +243,9 @@ export default class MJGameComponent extends cc.ScriptComponent {
   _registerEventHandlers() {
     cc.vv.gameNetMgr.dataEventHandler = this._entity;
     let node = this._entity;
-
+    this._registerSingleEventHandler(node, 'tile_clicked', (data) => {
+      this.onMJClicked(data);
+    })
     this._registerSingleEventHandler(node, 'login_result', null);
     this._registerSingleEventHandler(node, 'hangang_notify', null);
     this._registerSingleEventHandler(node, 'gang_notify', null);
@@ -288,7 +290,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     this._registerSingleEventHandler(node, 'game_over', () => {
 
     });
-    
+
     this._registerSingleEventHandler(node, 'game_num', () => {
       // todo
       // self._gamecount.string = "" + cc.vv.gameNetMgr.numOfGames + "/" + cc.vv.gameNetMgr.maxNumOfGames + "局";
@@ -655,18 +657,39 @@ export default class MJGameComponent extends cc.ScriptComponent {
     // this._playEfxs[index].play(name);
   }
 
-  onMJClicked(event) {
+  onMJClicked(data) {
+    console.log(`(mjGame event handler)tile ${data.key} is picked!`);
     // console.log("点击了");
-    // if (cc.vv.gameNetMgr.isHuanSanZhang) {
-    //   this.node.emit("mj_clicked", event.target);
-    //   return;
-    // }
+    if (cc.vv.gameNetMgr.isHuanSanZhang) {
 
-    // //如果不是自己的轮子，则忽略
+      // this.node.emit("mj_clicked", event.target);
+      return;
+    }
+
+    // //如果不是自己的回合，则忽略
     // if (cc.vv.gameNetMgr.turn != cc.vv.gameNetMgr.seatIndex) {
     //   console.log("not your turn." + cc.vv.gameNetMgr.turn);
     //   return;
     // }
+
+    for (let i = 0; i < this._myHolds.length; ++i) {
+      if (data.key === this._myHolds[i].name) {
+        if (this._selected && this._selected.name === data.key) {
+          console.log(`prepare to send pai ${data.key}`);
+          this._selected.lpos.z += 2;
+          this._selected = null;
+        } else if ((!this._selected) || this._selected.name !== data.key) {
+          if (this._selected) {
+            this._selected.lpos.z += 2;
+          }
+          this._myHolds[i].lpos.z -= 2;
+          this._selected = this._myHolds[i];
+        } else {
+
+        }
+
+      }
+    }
 
     // for (var i = 0; i < this._myMJArr.length; ++i) {
     //   if (event.target == this._myMJArr[i].node) {
@@ -1000,7 +1023,6 @@ export default class MJGameComponent extends cc.ScriptComponent {
 
     //初始化手牌
     let lackingNum = (seatData.pengs.length + seatData.angangs.length + seatData.diangangs.length + seatData.wangangs.length) * 3;
-    window.g_myholds = this._myHolds;
     for (let i = 0; i < holds.length; ++i) {
       let mjid = holds[i];
       cc.vv.mahjongmgr.instantiateMjTile(mjid, (err, entity) => {

@@ -30,7 +30,11 @@ import SeatComponent from './src/components/seat';
 import DingQueComponent from './src/components/dingque';
 import RoomControlComponent from './src/components/roomControl';
 import GameResultComponent from './src/components/gameresult';
+import TilePickerComponent from './src/components/tilePicker';
 import MahJongMgr from './src/components/mahjongMgr';
+
+// test
+import TestPickComponent from './src/components/testpick';
 
 let _componentRegitstry = {
   'game.start': StartComponent,
@@ -47,6 +51,9 @@ let _componentRegitstry = {
   'game.roomControl': RoomControlComponent,
   'game.result': GameResultComponent,
   'game.mahjongMgr': MahJongMgr,
+  //test
+  'test.pick': TestPickComponent,
+  'game.tilePicker': TilePickerComponent,
 };
 
 let color = color3.new(0.5, 0.5, 0.0);

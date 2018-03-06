@@ -42,7 +42,9 @@ export default class MJGameComponent extends cc.ScriptComponent {
     this._mainUI = null;
     this._waitingUI = null;
 
-    this._myHolds = [];
+    this._myHoldsPai = [];
+    this._myHolds = null;
+    window.g_mjgame = this;
   }
 
   start() {
@@ -93,7 +95,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     // init holds
     let holds = app.find('mine/holds', this._main3D);
     for (let i = 0; i < holds.children.length; ++i) {
-      this._myHolds.push(app.find(`tick${i}`, holds));
+      this._myHoldsPai.push(app.find(`tick${i}`, holds));
     }
     console.error(`_initView not finished.`)
   }
@@ -302,7 +304,9 @@ export default class MJGameComponent extends cc.ScriptComponent {
       console.log("剩余" + cc.vv.gameNetMgr.numOfMJ + "张");
     });
     this._registerSingleEventHandler(node, 'hupai', null);
-    this._registerSingleEventHandler(node, 'game_action', null);
+    this._registerSingleEventHandler(node, 'game_action', (data) => {
+      this.showAction(data);
+    });
     this._registerSingleEventHandler(node, 'game_mopai', (data) => {
       this.hideChupai();
       // data = data.detail;
@@ -313,9 +317,16 @@ export default class MJGameComponent extends cc.ScriptComponent {
         // let en = this._myHolds[13];
         cc.vv.mahjongmgr.instantiateMjTile(pai, (err, entity) => {
           if (!err && entity) {
-            entity.setParent(this._myHolds[13]);
-            this._myHolds[13].enabled = false;
-            this._myHolds[13].enabled = true;
+            if (this._myHoldsPai[13].children.length === 1) {
+              let oldChild = this._myHoldsPai[13].children[0];
+              oldChild.setParent(null);
+            } else {
+              console.error('A fatal error for mopai exists!');
+            }
+
+            entity.setParent(this._myHoldsPai[13]);
+            this._myHoldsPai[13].enabled = false;
+            this._myHoldsPai[13].enabled = true;
             entity.enabled = false;
             entity.enabled = true;
           }
@@ -560,6 +571,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
   }
 
   showAction(data) {
+    console.error('game actions callback not implemented.');
     // if (this._options.active) {
     //   this.hideOptions();
     // }
@@ -666,24 +678,25 @@ export default class MJGameComponent extends cc.ScriptComponent {
       return;
     }
 
-    // //如果不是自己的回合，则忽略
-    // if (cc.vv.gameNetMgr.turn != cc.vv.gameNetMgr.seatIndex) {
-    //   console.log("not your turn." + cc.vv.gameNetMgr.turn);
-    //   return;
-    // }
+    //如果不是自己的回合，则忽略
+    if (cc.vv.gameNetMgr.turn != cc.vv.gameNetMgr.seatIndex) {
+      console.log("not your turn." + cc.vv.gameNetMgr.turn);
+      return;
+    }
 
-    for (let i = 0; i < this._myHolds.length; ++i) {
-      if (data.key === this._myHolds[i].name) {
+    for (let i = 0; i < this._myHoldsPai.length; ++i) {
+      if (data.key === this._myHoldsPai[i].name) {
         if (this._selected && this._selected.name === data.key) {
-          console.log(`prepare to send pai ${data.key}`);
+          // console.log(`prepare to send pai ${data.key}`);
           this._selected.lpos.z += 2;
+          this.shoot(this._myHolds[i]);
           this._selected = null;
         } else if ((!this._selected) || this._selected.name !== data.key) {
           if (this._selected) {
             this._selected.lpos.z += 2;
           }
-          this._myHolds[i].lpos.z -= 2;
-          this._selected = this._myHolds[i];
+          this._myHoldsPai[i].lpos.z -= 2;
+          this._selected = this._myHoldsPai[i];
         } else {
 
         }
@@ -719,13 +732,13 @@ export default class MJGameComponent extends cc.ScriptComponent {
   }
 
   shoot(mjId) {
-    // if (mjId == null) {
-    //   return;
-    // }
-    // cc.vv.gameNetMgr.tempchupai = mjId;//记录临时出牌
-    // cc.vv.net.send('chupai', mjId);
+    if (mjId == null) {
+      return;
+    }
+    cc.vv.gameNetMgr.tempchupai = mjId;//记录临时出牌
+    cc.vv.net.send('chupai', mjId);
 
-    // var seatData = cc.vv.gameNetMgr.seats[cc.vv.gameNetMgr.seatIndex]
+    // var seatData = cc.vv.gameNetMgr.seats[cc.vv.gameNetMgr.seatIndex];
 
     // if (cc.vv.gameNetMgr.conf.type == 'hhmj') {
     //   if (cc.vv.gameNetMgr.isJing(mjId)) {
@@ -750,7 +763,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     // this.tingMaps = null;
     // this.tingMode = null;
 
-    // cc.vv.gameNetMgr.doTempChupai(mjId);//临时出牌
+    cc.vv.gameNetMgr.doTempChupai(mjId);//临时出牌
   }
 
   initMopai(seatIndex, pai) {
@@ -1016,20 +1029,28 @@ export default class MJGameComponent extends cc.ScriptComponent {
   initMahjongs() {
     let seats = cc.vv.gameNetMgr.seats;
     let seatData = seats[cc.vv.gameNetMgr.seatIndex];
-    let holds = this.sortHolds(seatData);
+    let holds = this._myHolds = this.sortHolds(seatData);
     if (holds == null) {
       return;
     }
 
     //初始化手牌
     let lackingNum = (seatData.pengs.length + seatData.angangs.length + seatData.diangangs.length + seatData.wangangs.length) * 3;
+    for (let i = 0; i < 14; ++i) {
+      if (this._myHoldsPai[i].children.length === 1) {
+        this._myHoldsPai[i].children[0].setParent(null);
+      } else if(this._myHoldsPai[i].children.length !== 0) {
+        console.error(`Fatal error in pai ${i}`);
+      }
+    }
     for (let i = 0; i < holds.length; ++i) {
       let mjid = holds[i];
       cc.vv.mahjongmgr.instantiateMjTile(mjid, (err, entity) => {
         if (!err && entity) {
-          entity.setParent(this._myHolds[i]);
-          this._myHolds[i].enabled = false;
-          this._myHolds[i].enabled = true;
+          this._myHoldsPai[i + lackingNum].children.length = 0;
+          entity.setParent(this._myHoldsPai[i + lackingNum]);
+          this._myHoldsPai[i + lackingNum].enabled = false;
+          this._myHoldsPai[i + lackingNum].enabled = true;
           entity.enabled = false;
           entity.enabled = true;
         }

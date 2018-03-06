@@ -250,11 +250,35 @@ export default class MJGameComponent extends cc.ScriptComponent {
     })
     this._registerSingleEventHandler(node, 'login_result', null);
     this._registerSingleEventHandler(node, 'hangang_notify', null);
-    this._registerSingleEventHandler(node, 'gang_notify', null);
-    this._registerSingleEventHandler(node, 'peng_notify', null);
+
+    this._registerSingleEventHandler(node, 'gang_notify', (data) => {
+      let seatData = data.seatData;
+      if (seatData.seatindex === cc.vv.gameNetMgr.seatIndex) {
+        this.initMahjongs();
+        console.log("自己碰牌");
+        // self.showPointPand();//标记                
+      }
+      else {
+        this.initOtherMahjongs(seatData);
+      }
+    });
+
+    this._registerSingleEventHandler(node, 'peng_notify', (data) => {
+      let seatData = data;
+      if (seatData.seatindex === cc.vv.gameNetMgr.seatIndex) {
+        this.initMahjongs();
+        console.log("自己碰牌");
+        // self.showPointPand();//标记                
+      }
+      else {
+        this.initOtherMahjongs(seatData);
+      }
+    });
+
     this._registerSingleEventHandler(node, 'game_dingque_finish', () => {
       this.initMahjongs();
     });
+
     this._registerSingleEventHandler(node, 'guo_result', null);
     this._registerSingleEventHandler(node, 'guo_notify', (data) => {
       this.hideChupai();
@@ -683,13 +707,16 @@ export default class MJGameComponent extends cc.ScriptComponent {
       console.log("not your turn." + cc.vv.gameNetMgr.turn);
       return;
     }
-
+    let seats = cc.vv.gameNetMgr.seats;
+    let seatData = seats[cc.vv.gameNetMgr.seatIndex];
+    let num = seatData.pengs.length + seatData.angangs.length + seatData.diangangs.length + seatData.wangangs.length;
+    num = num * 3;
     for (let i = 0; i < this._myHoldsPai.length; ++i) {
       if (data.key === this._myHoldsPai[i].name) {
         if (this._selected && this._selected.name === data.key) {
           // console.log(`prepare to send pai ${data.key}`);
           this._selected.lpos.z += 2;
-          this.shoot(this._myHolds[i]);
+          this.shoot(this._myHolds[i - num]);
           this._selected = null;
         } else if ((!this._selected) || this._selected.name !== data.key) {
           if (this._selected) {
@@ -1039,7 +1066,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     for (let i = 0; i < 14; ++i) {
       if (this._myHoldsPai[i].children.length === 1) {
         this._myHoldsPai[i].children[0].setParent(null);
-      } else if(this._myHoldsPai[i].children.length !== 0) {
+      } else if (this._myHoldsPai[i].children.length !== 0) {
         console.error(`Fatal error in pai ${i}`);
       }
     }

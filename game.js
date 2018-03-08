@@ -33,6 +33,7 @@ import GameResultComponent from './src/components/gameresult';
 import TilePickerComponent from './src/components/tilePicker';
 import GameActionsComponent from './src/components/gameActions';
 import PengGangComponent from './src/components/pengGang.js';
+import ChupaiComponent from './src/components/chupai.js';
 import MahJongMgr from './src/components/mahjongMgr';
 
 // test
@@ -58,6 +59,7 @@ let _componentRegitstry = {
   'game.tilePicker': TilePickerComponent,
   'game.actions': GameActionsComponent,
   'game.pengGang': PengGangComponent,
+  'game.chupai': ChupaiComponent,
 };
 
 let color = color3.new(0.5, 0.5, 0.0);

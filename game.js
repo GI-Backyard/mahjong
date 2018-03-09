@@ -34,8 +34,9 @@ import TilePickerComponent from './src/components/tilePicker';
 import GameActionsComponent from './src/components/gameActions';
 import PengGangComponent from './src/components/pengGang.js';
 import ChupaiComponent from './src/components/chupai.js';
-import MahJongMgr from './src/components/mahjongMgr';
+import RoundOverComponent from './src/components/roundOver.js';
 
+import MahJongMgr from './src/components/mahjongMgr';
 // test
 import TestPickComponent from './src/components/testpick';
 
@@ -60,6 +61,7 @@ let _componentRegitstry = {
   'game.actions': GameActionsComponent,
   'game.pengGang': PengGangComponent,
   'game.chupai': ChupaiComponent,
+  'game.roundOver': RoundOverComponent,
 };
 
 let color = color3.new(0.5, 0.5, 0.0);

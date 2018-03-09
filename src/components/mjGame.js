@@ -279,7 +279,9 @@ export default class MJGameComponent extends cc.ScriptComponent {
       this.initMahjongs();
     });
 
-    this._registerSingleEventHandler(node, 'guo_result', null);
+    this._registerSingleEventHandler(node, 'guo_result', () => {
+      this.hideOptions();
+    });
     this._registerSingleEventHandler(node, 'guo_notify', (data) => {
       this.hideChupai();
       this.hideOptions();
@@ -314,7 +316,9 @@ export default class MJGameComponent extends cc.ScriptComponent {
     });
 
     this._registerSingleEventHandler(node, 'game_over', () => {
-
+      this._waitingUI.enabled = true;
+      this._mainUI.enabled = false;
+      this._main3D.enabled = false;
     });
 
     this._registerSingleEventHandler(node, 'game_num', () => {

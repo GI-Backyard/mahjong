@@ -17,7 +17,7 @@ export default class PengGangComponent extends cc.ScriptComponent {
     });
 
     node.on('gang_notify', (data) => {
-      this.onPengGangChanged(data);
+      this.onPengGangChanged(data.seatData);
     });
 
     let seatsIndices = ['mine', 'right', 'oppo', 'left'];

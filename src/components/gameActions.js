@@ -79,7 +79,7 @@ export default class GameActionsComponent extends cc.ScriptComponent {
     } else if (opt === 'peng') {
       cc.vv.net.send('peng');
     } else if (opt === 'gang') {
-      cc.vv.net.send('gane');
+      cc.vv.net.send('gang');
     } else if (opt === 'hu') {
       cc.vv.net.send('hu');
     } else {

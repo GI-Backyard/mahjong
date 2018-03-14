@@ -5,18 +5,19 @@ cc.math.vec3.set(tileBox.size, 3.6670804, 2.601068, 5.09553576);
 export default class TilePickerComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._tiles = {};
+    this._tiles = new Array(14);
     this._mainCamera = null;
     this._mjGameNode = null;
   }
 
   start() {
     let app = this._app;
-    let en = app.find(this.holds);
-    if (en) {
+    let holds = app.find(this.holds);
+    if (holds) {
       for (let i = 0; i < 14; ++i) {
         let name = `tick${i}`;
-        this._tiles[name] = app.find(name, en);
+        let en = app.find(name, holds);
+        this._tiles[i] = { key: name, entity: en, index: i };
       }
     }
     this._mainCamera = app.find(this.camera);
@@ -41,8 +42,9 @@ export default class TilePickerComponent extends cc.ScriptComponent {
       this._mainCamera.getWorldPos(pos);
       let comp = this._mainCamera.getComp('Camera');
       comp._camera.screenToWorld(target, { x: input.mouseX, y: input.mouseY, z: 1 }, this._app._canvas.width, this._app._canvas.height);
-      for (let key in this._tiles) {
-        this._tiles[key].getWorldMatrix(mat);
+      for (let i = 0; i < this._tiles.length; ++i) {
+        let tile = this._tiles[i];
+        tile.entity.getWorldMatrix(mat);
         cc.math.mat4.invert(mat, mat);
         cc.math.vec3.transformMat4(rayPosLocal, pos, mat);
         cc.math.vec3.transformMat4(rayTargetLocal, target, mat);
@@ -51,8 +53,8 @@ export default class TilePickerComponent extends cc.ScriptComponent {
         let result = false;
         result = cc.geometry.intersect.ray_box(ray, tileBox, intersectPt);
         if (result && this._mjGameNode) {
-          if(this.isAvailbleTile(this._tiles[key]))
-          this._mjGameNode.emit('tile_clicked', { key });
+          if (this.isAvailbleTile(tile.entity))
+            this._mjGameNode.emit('tile_clicked', tile);
         }
       }
     }

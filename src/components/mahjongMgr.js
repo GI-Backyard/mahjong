@@ -31,6 +31,7 @@ export default class MahJongMgr extends cc.ScriptComponent {
   constructor() {
     super();
     cc.vv.mahjongmgr = this;
+    this._mtls = new Array(2);
   }
 
   start() {
@@ -40,6 +41,14 @@ export default class MahJongMgr extends cc.ScriptComponent {
 
   _initViews() {
     let app = this._app;
+    let mtlDummies = app.find('dummyforMatrial', this._entity);
+    let en = app.find('normal', mtlDummies);
+    let model = en && en.getComp('Model');
+    this._mtls[0] = model.material;
+
+    en = app.find('inactive', mtlDummies);
+    model = en && en.getComp('Model');
+    this._mtls[1] = model.material;
   }
 
   instantiateBlankMjTile(callback) {
@@ -58,6 +67,14 @@ export default class MahJongMgr extends cc.ScriptComponent {
       }
     });
     return null;
+  }
+
+  getNormalMtl() {
+    return this._mtls[0];
+  }
+
+  getInactiveMtl() {
+    return this._mtls[1];
   }
 
   instantiateMjTile(id, callback) {

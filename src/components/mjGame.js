@@ -45,6 +45,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     this._myHoldsPai = [];
     this._myHolds = null;
     window.g_mjgame = this;
+    this._queIndices = [];
   }
 
   start() {
@@ -357,6 +358,10 @@ export default class MJGameComponent extends cc.ScriptComponent {
             this._myHoldsPai[13].enabled = true;
             entity.enabled = false;
             entity.enabled = true;
+            if(this.checkQue(pai)) {
+              this._queIndices.push(13);
+              entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
+            }
           }
         });
         // var sprite = self._myMJArr[index];
@@ -703,6 +708,9 @@ export default class MJGameComponent extends cc.ScriptComponent {
     if (cc.vv.gameNetMgr.isHuanSanZhang) {
 
       // this.node.emit("mj_clicked", event.target);
+      return;
+    }
+    if (this._queIndices.length > 0 && this._queIndices.indexOf(data.index) === -1) {
       return;
     }
 
@@ -1059,6 +1067,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
   }
 
   initMahjongs() {
+    this._queIndices.length = 0;
     let seats = cc.vv.gameNetMgr.seats;
     let seatData = seats[cc.vv.gameNetMgr.seatIndex];
     let holds = this._myHolds = this.sortHolds(seatData);
@@ -1085,6 +1094,10 @@ export default class MJGameComponent extends cc.ScriptComponent {
           this._myHoldsPai[i + lackingNum].enabled = true;
           entity.enabled = false;
           entity.enabled = true;
+        }
+        if (this.checkQue(mjid)) {
+          this._queIndices.push(i + lackingNum);
+          entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
         }
       });
       // var sprite = this._myMJArr[i + lackingNum];

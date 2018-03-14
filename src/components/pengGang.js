@@ -19,6 +19,12 @@ export default class PengGangComponent extends cc.ScriptComponent {
     node.on('gang_notify', (data) => {
       this.onPengGangChanged(data.seatData);
     });
+    node.on('game_begin', () => {
+      let seats = cc.vv.gameNetMgr.seats;
+      for (let i in seats) {
+        this.onPengGangChanged(seats[i]);
+      }
+    });
 
     let seatsIndices = ['mine', 'right', 'oppo', 'left'];
     for (let i = 0; i < seatsIndices.length; ++i) {
@@ -97,7 +103,7 @@ export default class PengGangComponent extends cc.ScriptComponent {
       for (let i = 0; i < 4; ++i) {
         let tile = app.find(`${i}`, pengGangNode);
         tile.removeChild(tile.children[0]);
-        if(flag === 'peng' && i === 3) {
+        if (flag === 'peng' && i === 3) {
           continue;
         }
         cc.vv.mahjongmgr.instantiateMjTile(mjID, (err, entity) => {

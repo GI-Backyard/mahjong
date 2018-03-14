@@ -35,6 +35,7 @@ import GameActionsComponent from './src/components/gameActions';
 import PengGangComponent from './src/components/pengGang.js';
 import ChupaiComponent from './src/components/chupai.js';
 import RoundOverComponent from './src/components/roundOver.js';
+import TurnPointerComponent from './src/components/turnPointer.js';
 
 import MahJongMgr from './src/components/mahjongMgr';
 // test
@@ -62,6 +63,7 @@ let _componentRegitstry = {
   'game.pengGang': PengGangComponent,
   'game.chupai': ChupaiComponent,
   'game.roundOver': RoundOverComponent,
+  'game.turnPointer': TurnPointerComponent,
 };
 
 let color = color3.new(0.5, 0.5, 0.0);

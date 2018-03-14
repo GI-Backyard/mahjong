@@ -860,6 +860,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
   }
 
   initOtherMahjongs(seatData) {
+    // return;
     //console.log("seat:" + seatData.seatindex);
     let app = this._app;
     var localIndex = this.getLocalIndex(seatData.seatindex);

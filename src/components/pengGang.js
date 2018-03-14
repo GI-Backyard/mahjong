@@ -20,10 +20,7 @@ export default class PengGangComponent extends cc.ScriptComponent {
       this.onPengGangChanged(data.seatData);
     });
     node.on('game_begin', () => {
-      let seats = cc.vv.gameNetMgr.seats;
-      for (let i in seats) {
-        this.onPengGangChanged(seats[i]);
-      }
+      this.clearPengGangPai();
     });
 
     let seatsIndices = ['mine', 'right', 'oppo', 'left'];
@@ -48,6 +45,22 @@ export default class PengGangComponent extends cc.ScriptComponent {
     let seats = cc.vv.gameNetMgr.seats;
     for (let i in seats) {
       this.onPengGangChanged(seats[i]);
+    }
+  }
+
+  clearPengGangPai() {
+    let app = this._app;
+    for (let i = 0; i < 4; ++i) {
+      let sidePengGangRoot = this._sidePengGangNodes[i];
+      for (let j = 0; j < 4; ++j) {
+        let pengGangGroup = sidePengGangRoot[j];
+        for (let k = 0; k < 4; ++k) {
+          let tile = app.find(`${k}`, pengGangGroup);
+          if (tile.children[0]) {
+            tile.removeChild(tile.children[0]);
+          }
+        }
+      }
     }
   }
 

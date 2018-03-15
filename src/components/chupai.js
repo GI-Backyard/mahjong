@@ -5,12 +5,15 @@ export default class ChupaiComponent extends cc.ScriptComponent {
     this._mjGameNode = null;
     this._gameRoot = null;
     this._sideChupaiNodes = [];
+    this._chupaiPointer = null;
+    this._chupaiPointerPos = cc.math.vec3.create();
   }
 
   start() {
     let app = this._app;
     let node = this._mjGameNode = app.find(this.mjGameNode);
     this._gameRoot = app.find(this.gameRoot);
+    this._chupaiPointer = app.find(this.chupaiPointer);
 
     let seatsIndices = ['mine', 'right', 'oppo', 'left'];
     for (let i = 0; i < seatsIndices.length; ++i) {
@@ -34,16 +37,19 @@ export default class ChupaiComponent extends cc.ScriptComponent {
 
     node.on('game_begin', (data) => {
       this.initAllFolds();
+      this._chupaiPointer.lpos.x = this._chupaiPointer.lpos.y = this._chupaiPointer.lpos.z = 0;
     });
 
     node.on('peng_notify', () => {
       let seatdata = cc.vv.gameNetMgr.seats[cc.vv.gameNetMgr.turn];
       this.initFolds(seatdata);
+      this._chupaiPointer.lpos.x = this._chupaiPointer.lpos.y = this._chupaiPointer.lpos.z = 0;
     });
 
     node.on('gang_notify', () => {
       let seatdata = cc.vv.gameNetMgr.seats[cc.vv.gameNetMgr.turn];
       this.initFolds(seatdata);
+      this._chupaiPointer.lpos.x = this._chupaiPointer.lpos.y = this._chupaiPointer.lpos.z = 0;
     });
 
     node.on('hupai', () => {
@@ -87,7 +93,7 @@ export default class ChupaiComponent extends cc.ScriptComponent {
     let localIndex = cc.vv.gameNetMgr.getLocalIndex(seatData.seatindex);
 
     let sideChupai = this._sideChupaiNodes[localIndex];
-    for(let i = 0; i < sideChupai.length; ++i) {
+    for (let i = 0; i < sideChupai.length; ++i) {
       sideChupai[i].removeChild(sideChupai[i].children[0]);
     }
     for (let i = 0; i < folds.length; ++i) {
@@ -99,6 +105,11 @@ export default class ChupaiComponent extends cc.ScriptComponent {
         sideChupai[i].enabled = true;
         entity.enabled = false;
         entity.enabled = true;
+        let pointerTurn = cc.vv.gameNetMgr.gamestart ? cc.vv.gameNetMgr.lastChuPaiTurn : cc.vv.gameNetMgr.turn;
+        if (seatData.seatindex == pointerTurn && i == (folds.length - 1)) {
+          sideChupai[i].getWorldPos(this._chupaiPointerPos);
+          this._chupaiPointer.setWorldPos(this._chupaiPointerPos);
+        }
       });
       // logStr += folds[i] + ((i === (folds.length - 1)) ? ']' : ',');
     }

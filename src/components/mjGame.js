@@ -332,7 +332,42 @@ export default class MJGameComponent extends cc.ScriptComponent {
       // todo
       console.log("剩余" + cc.vv.gameNetMgr.numOfMJ + "张");
     });
-    this._registerSingleEventHandler(node, 'hupai', null);
+    this._registerSingleEventHandler(node, 'hupai', (data) => {
+      console.log('有人胡牌了。');
+      var pai = data.hupai;
+      var localIndex = cc.vv.gameNetMgr.getLocalIndex(data.seatindex);
+      let sideHolds = null;
+      if (localIndex === 0) {
+        sideHolds = this._myHoldsPai;
+      } else {
+        let seatsIndices = ['mine', 'right', 'oppo', 'left'];
+        let side = seatsIndices[localIndex];
+        let sideRoot = this._app.find(side, this._main3D);
+        sideHolds = this._app.find("holds", sideRoot).children;
+      }
+      // var index = 13;
+      // let en = this._myHolds[13];
+      cc.vv.mahjongmgr.instantiateMjTile(pai, (err, entity) => {
+        if (!err && entity) {
+          // clear all children
+          let children = [];
+          for(let i = 0; i < sideHolds[13].children.length; ++i) {
+            children.push(sideHolds[13].children[i]);
+          }
+          for(let i = 0; i < children.length; ++i) {
+            children[i].setParent(null);
+          }
+
+          entity.setParent(sideHolds[13]);
+          cc.math.quat.fromEuler(entity.lrot, -90, 0, 0);
+          // entity.lpos.x = entity.lpos.x;
+          sideHolds[13].enabled = false;
+          sideHolds[13].enabled = true;
+          entity.enabled = false;
+          entity.enabled = true;
+        }
+      });
+    });
     this._registerSingleEventHandler(node, 'game_action', (data) => {
       this.showAction(data);
     });
@@ -358,7 +393,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
             this._myHoldsPai[13].enabled = true;
             entity.enabled = false;
             entity.enabled = true;
-            if(this.checkQue(pai)) {
+            if (this.checkQue(pai)) {
               this._queIndices.push(13);
               entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
             }

@@ -67,19 +67,19 @@ export default class GameActionsComponent extends cc.ScriptComponent {
       // update eventmgr
       let btn = this._optionsNode[i].getComp('Button');
       btn._clickListeners.push(() => {
-        this.onOptsClicked(ops[i]);
+        this.onOptsClicked(ops[i], data.pai);
       });
     }
   }
 
-  onOptsClicked(opt) {
+  onOptsClicked(opt, pai) {
     if (opt === 'guo') {
       cc.vv.net.send('guo');
       this.clearOptions();
     } else if (opt === 'peng') {
       cc.vv.net.send('peng');
     } else if (opt === 'gang') {
-      cc.vv.net.send('gang');
+      cc.vv.net.send('gang', pai);
     } else if (opt === 'hu') {
       cc.vv.net.send('hu');
     } else {

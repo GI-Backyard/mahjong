@@ -94,14 +94,14 @@ export default class RoomControlComponent extends cc.ScriptComponent {
       var b = data.states[i];
       var name = cc.vv.gameNetMgr.seats[i].name;
       if (b) {
-        this._extraInfo += "player" + i + " {agree} ";
+        this._extraInfo += name + " {同意}\n ";
         if (i == cc.vv.gameNetMgr.seatIndex) {
           this._dissolveAgree.enabled = false;
           this._dissolveReject.enabled = false;
           // this._dissolveStringNotice.active = true;
         }
       } else {
-        this._extraInfo += "player" + i + " {...} ";
+        this._extraInfo += name + " {...}\n ";
       }
     }
   }
@@ -139,7 +139,7 @@ export default class RoomControlComponent extends cc.ScriptComponent {
       }
 
       if (this._noticeLabel) {
-        this._noticeLabel.text = str + s + "s " + this._extraInfo;
+        this._noticeLabel.text = str + s + "秒后自动解散房间\n " + this._extraInfo;
       }
     }
   }

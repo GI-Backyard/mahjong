@@ -96,9 +96,10 @@ export default class joinRoomComponent extends cc.ScriptComponent {
 
   _tryEnterRoom() {
     // parse room id
-    let roomId = 0;
+    let roomId = '';
     for (let i = 0; i < _maxCharNum; ++i) {
-      roomId += parseInt(this._chars[i]) * Math.pow(10, _maxCharNum - i - 1);
+      roomId += this._chars[i];
+      //  += parseInt() * Math.pow(10, _maxCharNum - i - 1);
     }
     cc.vv.userMgr.enterRoom(roomId,
       (ret) => {

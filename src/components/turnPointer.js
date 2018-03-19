@@ -5,20 +5,20 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
     super();
     this._mjGameNode = null;
     this._turnRoot = null;
-    // this._defaultTurn = 0;
-    // this._turnS = [];
-    // this._lastActiveTurn = -1;
+    this._defaultTurn = null;
+    this._turnS = [];
+    this._lastActiveTurn = null;
   }
 
   start() {
     let app = this._app;
     this._turnRoot = app.find(this.turnPointer);
-    // this._defaultTurn = app.find('pointer_k', this._turnRoot);
-    // let turnstring = ['pointer_d', 'pointer_b', 'pointer_x', 'pointer_n'];
-    // this._turnS.push(app.find(turnstring[0], this._turnRoot));
-    // this._turnS.push(app.find(turnstring[1], this._turnRoot));
-    // this._turnS.push(app.find(turnstring[2], this._turnRoot));
-    // this._turnS.push(app.find(turnstring[3], this._turnRoot));
+    this._defaultTurn = app.find('kong', this._turnRoot);
+    let turnstring = ['dong', 'nan', 'xi', 'bei'];
+    this._turnS.push(app.find(turnstring[0], this._turnRoot));
+    this._turnS.push(app.find(turnstring[1], this._turnRoot));
+    this._turnS.push(app.find(turnstring[2], this._turnRoot));
+    this._turnS.push(app.find(turnstring[3], this._turnRoot));
     let node = this._mjGameNode = app.find(this.mjGameNode);
     node.on('game_begin', (data) => {
       this.initRound();
@@ -31,14 +31,14 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
       // self._alertTime = 3;
     });
     this.initRound();
-    // this._lastActiveTurn = this._defaultTurn;
-    // this._defaultTurn.enabled = true;
+    this._lastActiveTurn = this._defaultTurn;
+    this._defaultTurn.enabled = true;
     this.initPointer();
   }
 
   initRound() {
-    // let index = cc.vv.gameNetMgr.getLocalIndex(0);
-    // cc.math.quat.fromEuler(this._turnRoot.lrot, 0, index * -90, 0);
+    let index = cc.vv.gameNetMgr.getLocalIndex(0);
+    cc.math.quat.fromEuler(this._turnRoot.lrot, 0, index * -90, 0);
     console.log('new round start');
   }
 
@@ -68,11 +68,16 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
     // var buttonLocalIndex = cc.vv.gameNetMgr.getLocalIndex(0);
     // this._pointer.rotation = buttonLocalIndex * -90;
 
-    let index = cc.vv.gameNetMgr.getLocalIndex(cc.vv.gameNetMgr.turn);
-    cc.math.quat.fromEuler(this._turnRoot.lrot, 0, index * 90, 0);
+    // let index = cc.vv.gameNetMgr.getLocalIndex();
+    // // cc.math.quat.fromEuler(this._turnRoot.lrot, 0, index * 90, 0);
     // for (var i = 0; i < this._pointer.children.length; ++i) {
-    //   this._pointer.children[i].active = i == localIndex;
+    //   this._pointer.children[i].active = (i == index);
     // }
+    if (cc.vv.gameNetMgr.turn !== -1) {
+      this.selectPointer((this._turnS.length - cc.vv.gameNetMgr.turn)%this._turnS.length) ;
+    } else {
+      this.selectPointer(-1);
+    }
   }
 
   selectPointer(index) {

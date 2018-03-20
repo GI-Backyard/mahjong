@@ -54,5 +54,18 @@ export default class HallComponent extends cc.ScriptComponent {
   }
 
   tick() {
+    if (cc.vv && cc.vv.userMgr.roomData != null) {
+      var roomId = cc.vv.userMgr.roomData;
+      cc.vv.userMgr.roomData = null;
+      var fnEnter = function () {
+        cc.vv.userMgr.enterRoom(roomId, function (ret) {
+          //网络错误，需要反复重试
+          if (ret.errcode <= -10000) {
+            fnEnter();
+          }
+        });
+      }
+      fnEnter();
+    }
   }
 }

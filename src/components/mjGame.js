@@ -78,10 +78,10 @@ export default class MJGameComponent extends cc.ScriptComponent {
     this._initView();
     this._registerEventHandlers();
 
-    this._main3D.enabled = false;
-    this._mainUI.enabled = false;
+    this._main3D.enabled = true;
+    this._mainUI.enabled = true;
     this._waitingUI.enabled = true;
-    this._initWanfaLabel();
+    this._initRoomInfo();
     this._onGameBeign();
     // cc.vv.audioMgr.playBGM("bgFight.mp3");
     // cc.vv.utils.addEscEvent(this.node);
@@ -101,8 +101,13 @@ export default class MJGameComponent extends cc.ScriptComponent {
     console.error(`_initView not finished.`)
   }
 
-  _initWanfaLabel() {
-    console.error(`_initWanfaLabel not finished.`)
+  _initRoomInfo() {
+    let app = this._app;
+    let roomID = app.find('roomID',this._mainUI);
+    let comp = roomID && roomID.getComp('Text');
+    if(comp) {
+      comp.text = `房号: ${cc.vv.gameNetMgr.roomId}`;
+    }
   }
 
   _onGameBeign() {
@@ -318,8 +323,8 @@ export default class MJGameComponent extends cc.ScriptComponent {
 
     this._registerSingleEventHandler(node, 'game_over', () => {
       this._waitingUI.enabled = true;
-      this._mainUI.enabled = false;
-      this._main3D.enabled = false;
+      this._mainUI.enabled = true;
+      this._main3D.enabled = true;
     });
 
     this._registerSingleEventHandler(node, 'game_num', () => {

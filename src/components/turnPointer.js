@@ -38,7 +38,7 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
 
   initRound() {
     let index = cc.vv.gameNetMgr.getLocalIndex(0);
-    cc.math.quat.fromEuler(this._turnRoot.lrot, 0, index * -90, 0);
+    cc.math.quat.fromEuler(this._turnRoot.lrot, 0, index * 90, 0);
     console.log('new round start');
   }
 

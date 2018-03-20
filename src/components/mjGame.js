@@ -46,6 +46,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     this._myHolds = null;
     window.g_mjgame = this;
     this._queIndices = [];
+    this._roundInfo = null;
   }
 
   start() {
@@ -92,7 +93,8 @@ export default class MJGameComponent extends cc.ScriptComponent {
     this._main3D = app.find(this.main_3d);
     this._mainUI = app.find(this.main_ui);
     this._waitingUI = app.find(this.waiting_ui);
-
+    let en = app.find('roundInfo', this._mainUI);
+    this._roundInfo = en && en.getComp('Text');
     // init holds
     let holds = app.find('mine/holds', this._main3D);
     for (let i = 0; i < holds.children.length; ++i) {
@@ -103,9 +105,9 @@ export default class MJGameComponent extends cc.ScriptComponent {
 
   _initRoomInfo() {
     let app = this._app;
-    let roomID = app.find('roomID',this._mainUI);
+    let roomID = app.find('roomID', this._mainUI);
     let comp = roomID && roomID.getComp('Text');
-    if(comp) {
+    if (comp) {
       comp.text = `房号: ${cc.vv.gameNetMgr.roomId}`;
     }
   }
@@ -172,6 +174,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     this._mainUI.enabled = true;
     this._waitingUI.enabled = false;
     this.initMahjongs();
+    this._updateRoundInfo();
     var seats = cc.vv.gameNetMgr.seats;
     for (var i in seats) {
       var seatData = seats[i];
@@ -328,14 +331,10 @@ export default class MJGameComponent extends cc.ScriptComponent {
     });
 
     this._registerSingleEventHandler(node, 'game_num', () => {
-      // todo
-      // self._gamecount.string = "" + cc.vv.gameNetMgr.numOfGames + "/" + cc.vv.gameNetMgr.maxNumOfGames + "局";
-      console.log("" + cc.vv.gameNetMgr.numOfGames + "/" + cc.vv.gameNetMgr.maxNumOfGames + "局");
+      this._updateRoundInfo();
     });
     this._registerSingleEventHandler(node, 'mj_count', () => {
-      // self._mjcount.string = "剩余" + cc.vv.gameNetMgr.numOfMJ + "张";
-      // todo
-      console.log("剩余" + cc.vv.gameNetMgr.numOfMJ + "张");
+      this._updateRoundInfo();
     });
     this._registerSingleEventHandler(node, 'hupai', (data) => {
       console.log('有人胡牌了。');
@@ -356,10 +355,10 @@ export default class MJGameComponent extends cc.ScriptComponent {
         if (!err && entity) {
           // clear all children
           let children = [];
-          for(let i = 0; i < sideHolds[13].children.length; ++i) {
+          for (let i = 0; i < sideHolds[13].children.length; ++i) {
             children.push(sideHolds[13].children[i]);
           }
-          for(let i = 0; i < children.length; ++i) {
+          for (let i = 0; i < children.length; ++i) {
             children[i].setParent(null);
           }
 
@@ -451,6 +450,12 @@ export default class MJGameComponent extends cc.ScriptComponent {
     });
   }
 
+  _updateRoundInfo() {
+    let text = "" + cc.vv.gameNetMgr.numOfGames + "/" + cc.vv.gameNetMgr.maxNumOfGames + "局 " + "剩余" + cc.vv.gameNetMgr.numOfMJ + "张";
+    if(this._roundInfo) {
+      this._roundInfo.text = text;
+    }
+  }
   hideChupai() {
     // nothing to do here
     // console.error('mjGame hideChupai not implemented');

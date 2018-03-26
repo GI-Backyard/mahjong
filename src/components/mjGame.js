@@ -40,7 +40,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     super();
     this._main3D = null;
     this._mainUI = null;
-    this._waitingUI = null;
+    // this._waitingUI = null;
 
     this._myHoldsPai = [];
     this._myHolds = null;
@@ -81,7 +81,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
 
     this._main3D.enabled = true;
     this._mainUI.enabled = true;
-    this._waitingUI.enabled = true;
+    // this._waitingUI.enabled = true;
     this._initRoomInfo();
     this._onGameBeign();
     // cc.vv.audioMgr.playBGM("bgFight.mp3");
@@ -92,7 +92,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     let app = this._app;
     this._main3D = app.find(this.main_3d);
     this._mainUI = app.find(this.main_ui);
-    this._waitingUI = app.find(this.waiting_ui);
+    // this._waitingUI = app.find(this.waiting_ui);
     let en = app.find('roundInfo', this._mainUI);
     this._roundInfo = en && en.getComp('Text');
     // init holds
@@ -172,7 +172,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
 
     this._main3D.enabled = true;
     this._mainUI.enabled = true;
-    this._waitingUI.enabled = false;
+    // this._waitingUI.enabled = false;
     this.initMahjongs();
     this._updateRoundInfo();
     var seats = cc.vv.gameNetMgr.seats;
@@ -325,7 +325,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
     });
 
     this._registerSingleEventHandler(node, 'game_over', () => {
-      this._waitingUI.enabled = true;
+      // this._waitingUI.enabled = true;
       this._mainUI.enabled = true;
       this._main3D.enabled = true;
     });

@@ -10,7 +10,7 @@ export default class createRoomComponent extends cc.ScriptComponent {
       difen: 0,
       zimo: 0,
       jiangdui: true,
-      huansanzhang: true,
+      huansanzhang: false,
       zuidafanshu: 0,
       jushuxuanze: 0,
       dianganghua: 0,

@@ -3,7 +3,7 @@ let { color4 } = cc.math;
 export default class RoomWaiting extends cc.ScriptComponent {
   constructor() {
     super();
-    this._waitingSeats = [];
+    // this._waitingSeats = [];
     this._mjSeats = [];
     this._mjGameNode = null;
   }
@@ -26,19 +26,22 @@ export default class RoomWaiting extends cc.ScriptComponent {
       // this.refreshBtns();
     });
     this._registerCallback(node, 'game_huanpai', () => {
-      for (let i in this._mjSeats) {
-        this._mjSeats[i].refreshXuanPaiState();
-      }
+      // for (let i in this._mjSeats) {
+      //   this._mjSeats[i].refreshXuanPaiState();
+      // }
+    });
+    this._registerCallback(node, 'game_dingque_finish', () => {
+      this.refreshQueState();
     });
     this._registerCallback(node, 'huanpai_notify', (data) => {
       let idx = data.detail.seatindex;
       let localIdx = cc.vv.gameNetMgr.getLocalIndex(idx);
-      this._mjSeats[localIdx].refreshXuanPaiState();
+      // this._mjSeats[localIdx].refreshXuanPaiState();
     });
     this._registerCallback(node, 'game_huanpai_over', () => {
-      for (let i in this._mjSeats) {
-        this._mjSeats[i].refreshXuanPaiState();
-      }
+      // for (let i in this._mjSeats) {
+      //   this._mjSeats[i].refreshXuanPaiState();
+      // }
     });
     this._registerCallback(node, 'voice_msg', () => {
       console.warn('voice_msg is not implemented.');
@@ -60,7 +63,7 @@ export default class RoomWaiting extends cc.ScriptComponent {
       let idx = data;
       let localIdx = cc.vv.gameNetMgr.getLocalIndex(idx);
       let seatData = cc.vv.gameNetMgr.seats[idx];
-      this._mjSeats[localIdx].baoTing(true, seatData.isfeiting);
+      // this._mjSeats[localIdx].baoTing(true, seatData.isfeiting);
     });
     this.initSeats();
     console.log('root waiting runs');
@@ -79,12 +82,12 @@ export default class RoomWaiting extends cc.ScriptComponent {
   initView() {
     let app = this._app;
     let seatsIndices = ['me', 'right', 'top', 'left'];
-    let waitingSeats = app.find(this.waitingSeats);
+    // let waitingSeats = app.find(this.waitingSeats);
     let gameSeats = app.find(this.mjGameSeats);
     for (let index = 0; index < 4; ++index) {
-      let en = app.find(seatsIndices[index], waitingSeats);
-      this._waitingSeats.push(en && en.getComp('game.seat'));
-      en = app.find(seatsIndices[index], gameSeats);
+      // let en = app.find(seatsIndices[index], waitingSeats);
+      // this._waitingSeats.push(en && en.getComp('game.seat'));
+      let en = app.find(seatsIndices[index], gameSeats);
       this._mjSeats.push(en && en.getComp('game.seat'));
     }
 
@@ -93,18 +96,39 @@ export default class RoomWaiting extends cc.ScriptComponent {
     this._initWanfaLabel();
   }
 
+  refreshQueState() {
+    let arr = ["tong", "tiao", "wan"];
+    let data = cc.vv.gameNetMgr.seats;
+    for (let i = 0; i < data.length; ++i) {
+      let que = data[i].dingque;
+      if (que == null || que < 0 || que >= arr.length) {
+        que = null;
+        // this._mjSeats.enabled = false;
+      }
+      else {
+        que = arr[que];
+        // this._mjSeats.enabled = true;
+      }
+
+      let localIndex = cc.vv.gameNetMgr.getLocalIndex(i);
+      this._mjSeats[localIndex].setQue(que);
+
+    }
+  }
+
   initSeats() {
     let seats = cc.vv.gameNetMgr.seats;
     for (let i = 0; i < seats.length; ++i) {
       this.initSingleSeat(seats[i]);
     }
+    this.refreshQueState();
   }
 
   initSingleSeat(seat) {
     let index = cc.vv.gameNetMgr.getLocalIndex(seat.seatindex);
     let isOffline = !seat.online;
     let isZhuang = (seat.seatindex == cc.vv.gameNetMgr.button);
-    let seatNode = this._waitingSeats[index];
+    // let seatNode = this._waitingSeats[index];
     // if (seat.userid !== 0) {
     //   seatNode.enabled = true;
     //   let image = seatNode.getComp('Image');
@@ -118,18 +142,18 @@ export default class RoomWaiting extends cc.ScriptComponent {
     // }
     // console.log("isOffline:" + isOffline);
 
-    this._waitingSeats[index].setInfo(seat.name, seat.score);
-    this._waitingSeats[index].setReady(seat.ready);
-    this._waitingSeats[index].setOffline(isOffline);
-    this._waitingSeats[index].setID(seat.userid, 'ID:');
-    this._waitingSeats[index].voiceMsg(false);
+    // this._waitingSeats[index].setInfo(seat.name, seat.score);
+    // this._waitingSeats[index].setReady(seat.ready);
+    // this._waitingSeats[index].setOffline(isOffline);
+    // this._waitingSeats[index].setID(seat.userid, 'ID:');
+    // this._waitingSeats[index].voiceMsg(false);
 
     this._mjSeats[index].setInfo(seat.name, seat.score);
     this._mjSeats[index].setZhuang(isZhuang);
     this._mjSeats[index].setOffline(isOffline);
     this._mjSeats[index].setID(seat.userid, 'ID:');
-    this._mjSeats[index].voiceMsg(false);
-    this._mjSeats[index].baoTing(seat.isbaoting, seat.isfeiting);
+    // this._mjSeats[index].voiceMsg(false);
+    // this._mjSeats[index].baoTing(seat.isbaoting, seat.isfeiting);
     this._mjSeats[index].refreshXuanPaiState();
   }
 

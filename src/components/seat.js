@@ -3,19 +3,18 @@ let { color4 } = cc.math;
 export default class SeatComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._sprIcon = null;
-    this._zhuang = null;
-    this._ready = null;
-    this._offline = null;
-    this._lblName = null;
-    this._lblScore = null;
-    this._scoreBg = null;
-    this._nddayingjia = null;
-    this._voicemsg = null;
+    this._zhuangImage = null;
+    this._offlineImage = null;
+    this._queImage = null;
+    // this._lblName = null;
+    // this._lblScore = null;
+    // this._scoreBg = null;
+    // this._nddayingjia = null;
+    // this._voicemsg = null;
 
-    this._chatBubble = null;
-    this._emoji = null;
-    this._lastChatTime = -1;
+    // this._chatBubble = null;
+    // this._emoji = null;
+    // this._lastChatTime = -1;
 
     this._userName = "";
     this._score = 0;
@@ -24,6 +23,8 @@ export default class SeatComponent extends cc.ScriptComponent {
     this._isReady = false;
     this._isZhuang = false;
     this._userId = null;
+    this._queSprites = {};
+    this._que = null;
   }
 
   start() {
@@ -31,6 +32,34 @@ export default class SeatComponent extends cc.ScriptComponent {
       return;
     }
 
+    let seatNode = this._entity;
+    let app = this._app;
+    let en = app.find('zhuang', seatNode);
+    let comp = en && en.getComp('Image');
+    this._zhuangImage = comp;
+
+    en = app.find('offline', seatNode);
+    comp = en && en.getComp('Image');
+    this._offlineImage = comp;
+
+    en = app.find('que', seatNode);
+    comp = en && en.getComp('Image');
+    this._queImage = comp;
+
+    // get tong, tiao, wan sprites
+    let seats = seatNode.parent;
+    let dummy = app.find('dummy', seats);
+    en = app.find('wan', dummy);
+    comp = en && en.getComp('Image');
+    this._queSprites['wan'] = comp.sprite;
+
+    en = app.find('tong', dummy);
+    comp = en && en.getComp('Image');
+    this._queSprites['tong'] = comp.sprite;
+
+    en = app.find('tiao', dummy);
+    comp = en && en.getComp('Image');
+    this._queSprites['tiao'] = comp.sprite;
     // this._sprIcon = this.node.getChildByName('iconmask').getChildByName("icon").getComponent("ImageLoader");
     // this._lblName = this.node.getChildByName("name").getComponent(cc.Label);
     // this._lblScore = this.node.getChildByName("score").getComponent(cc.Label);
@@ -92,7 +121,16 @@ export default class SeatComponent extends cc.ScriptComponent {
   }
 
   refresh() {
-
+    if (this._zhuangImage) {
+      this._zhuangImage.enabled = this._isZhuang;
+    }
+    if (this._queImage) {
+      this._queImage.enabled = (this._que !== null);
+      this._queImage.sprite = this._queSprites[this._que || 'wan'];
+    }
+    if (this._offlineImage) {
+      this._offlineImage.enabled = this._isOffline;
+    }
   }
 
   setInfo(name, score, dayingjia) {
@@ -115,10 +153,21 @@ export default class SeatComponent extends cc.ScriptComponent {
   }
 
   setZhuang(value) {
+    value = !!value;
     this._isZhuang = value;
-    // if (this._zhuang) {
-    //   this._zhuang.active = value;
-    // }
+    if (this._zhuangImage) {
+      this._zhuangImage.enabled = !!value;
+    }
+  }
+
+  setQue(que) {
+    this._que = que;
+    if (this._queImage) {
+      this._queImage.enabled = (que !== null);
+      this._queImage.sprite = this._queSprites[que || 'wan'];
+    }
+
+    console.log(`user selected que ${que || 'null'}`);
   }
 
   setReady(isReady) {
@@ -151,16 +200,21 @@ export default class SeatComponent extends cc.ScriptComponent {
   }
 
   setOffline(isOffline) {
+    isOffline = !!isOffline;
     this._isOffline = isOffline;
-    // set XXX
-    let image = this._entity.getComp('Image');
-    if (isOffline) {
-      image && (image.color = color4.new(0.2, 0.2, 0.2, 1.0));
-    } else {
-      image && (image.color = color4.new(1.0, 1.0, 1.0, 1.0));
+    if (this._offlineImage) {
+      this._offlineImage.enabled = isOffline;
     }
-    // hack code
-    image._vertexDataDirty = true;
+    // this._isOffline = isOffline;
+    // // set XXX
+    // let image = this._entity.getComp('Image');
+    // if (isOffline) {
+    //   image && (image.color = color4.new(0.2, 0.2, 0.2, 1.0));
+    // } else {
+    //   image && (image.colors = color4.new(1.0, 1.0, 1.0, 1.0));
+    // }
+    // // hack code
+    // image._vertexDataDirty = true;
     // if (this._offline) {
     //   this._offline.active = this._isOffline && this._userName != "";
     // }

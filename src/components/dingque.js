@@ -103,7 +103,7 @@ export default class DingQueComponent extends cc.ScriptComponent {
       // self.queYiMen.active = false;
       self._dingQueRoot.enabled = false;
       cc.vv.gameNetMgr.isDingQueing = false;
-      self.initDingQue();
+      // self.initDingQue();
     });
   }
 

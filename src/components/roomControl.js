@@ -14,6 +14,7 @@ export default class RoomControlComponent extends cc.ScriptComponent {
     this._endTime = 0;
     this._extraInfo = '';
     this._noticeLabel = null;
+    this._gameBegin = false;
   }
 
   start() {
@@ -38,7 +39,7 @@ export default class RoomControlComponent extends cc.ScriptComponent {
     btn = en && en.getComp('Button');
     if (btn) {
       btn._clickListeners.push(() => {
-        this.onBtnOkClicked();
+        this.onBtnBackClicked();
         // this._alertBoard.enabled = true;
       });
     }
@@ -75,6 +76,14 @@ export default class RoomControlComponent extends cc.ScriptComponent {
     node.on("dissolve_cancel", (event) => {
       this.closeAll();
     });
+
+    node.on('game_begin', () => {
+      this._gameBegin = true;
+    });
+
+    node.on('game_over', () => {
+      this._gameBegin = false;
+    });
   }
 
   closeAll() {
@@ -106,8 +115,18 @@ export default class RoomControlComponent extends cc.ScriptComponent {
     }
   }
 
-  onBtnOkClicked() {
-    cc.vv.net.send("dissolve_request");
+  onBtnBackClicked() {
+    if(this._gameBegin) {
+      cc.vv.net.send("dissolve_request");
+    } else {
+      if(cc.vv.gameNetMgr.isOwner()) {
+        if(!cc.vv.gameNetMgr.conf.for_others) {
+          cc.vv.net.send("dispress");
+        }
+      } else {
+        cc.vv.net.send("exit");
+      }
+    }
   }
 
   onBtnCancelClicked() {

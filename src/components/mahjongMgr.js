@@ -32,10 +32,12 @@ export default class MahJongMgr extends cc.ScriptComponent {
     super();
     cc.vv.mahjongmgr = this;
     this._mtls = new Array(2);
+    this._game = null;
   }
 
   start() {
     this._initViews();
+    this._game = this._app;
     console.log('mahjongmgr runs');
   }
 
@@ -53,7 +55,7 @@ export default class MahJongMgr extends cc.ScriptComponent {
 
   instantiateBlankMjTile(callback) {
     let uuid = this['Dragon_Blank'];
-    let app = this._app;
+    let app = this._game;
     app.assets.load(uuid, (err, asset) => {
       if (err) {
         callback && callback(err, null);
@@ -79,7 +81,7 @@ export default class MahJongMgr extends cc.ScriptComponent {
 
   instantiateMjTile(id, callback) {
     let uuid = this[tilesNameTable[id]];
-    let app = this._app;
+    let app = this._game;
     app.assets.load(uuid, (err, asset) => {
       if (err) {
         callback && callback(err, null);

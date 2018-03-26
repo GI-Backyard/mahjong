@@ -37,6 +37,10 @@ import ChupaiComponent from './src/components/chupai.js';
 import RoundOverComponent from './src/components/roundOver.js';
 import TurnPointerComponent from './src/components/turnPointer.js';
 
+// demo
+import DemoStartComponent from './src/demo/demoStart.js';
+import DemoPointerComponent from './src/demo/demoPointer.js';
+
 import MahJongMgr from './src/components/mahjongMgr';
 // test
 import TestPickComponent from './src/components/testpick';
@@ -56,7 +60,7 @@ let _componentRegitstry = {
   'game.roomControl': RoomControlComponent,
   'game.result': GameResultComponent,
   'game.mahjongMgr': MahJongMgr,
-  //test
+  // test
   'test.pick': TestPickComponent,
   'game.tilePicker': TilePickerComponent,
   'game.actions': GameActionsComponent,
@@ -64,6 +68,9 @@ let _componentRegitstry = {
   'game.chupai': ChupaiComponent,
   'game.roundOver': RoundOverComponent,
   'game.turnPointer': TurnPointerComponent,
+  // demo
+  'game.demo.start': DemoStartComponent,
+  'game.demo.pointer': DemoPointerComponent,
 };
 
 let color = color3.new(0.5, 0.5, 0.0);

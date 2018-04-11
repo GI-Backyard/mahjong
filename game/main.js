@@ -11,7 +11,7 @@ const { resl, path } = cc;
 
 let assetsDir = './assets/mahjong-unity';
 let assetsFile = 'assets.json';
-let scenes = './assets/scenes.json';
+let scenes = './scenes.json';
 
 // init game
 let game = cc.game = new mahjong.Game(canvas);

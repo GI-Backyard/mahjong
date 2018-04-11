@@ -1,0 +1,11 @@
+{
+  "start": "./assets/mahjong-unity/start.json",
+  "demo_start": "./assets/mahjong-unity/demo_start.json",
+  "demo_mjRoom": "./assets/mahjong-unity/demo_mjRoom.json",
+  "createrole": "./assets/mahjong-unity/create_role.json",
+  "hall": "./assets/mahjong-unity/hall.json",
+  "mjgame": "./assets/mahjong-unity/mjroom.json",
+  "test_ui": "./assets/mahjong-unity/test_error_room.json",
+  "test_3d": "./assets/mahjong-unity/test_3d.json",
+  "test_2cam": "./assets/mahjong-unity/test_2Cam.json"
+}

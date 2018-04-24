@@ -11,7 +11,7 @@ export default class LoginComponent extends cc.ScriptComponent {
     this._canvas.enabled = true;
     let guestLoginNode = app.find('Image', this._canvas);
     this._guestLoginBtn = guestLoginNode.getComp('Button');
-    this._guestLoginBtn._clickListeners.push(() => {
+    this._guestLoginBtn._entity.on('clicked',() => {
       this.onGuestAuth();
     });
     cc.vv.http.url = cc.vv.http.master_url;
@@ -24,8 +24,7 @@ export default class LoginComponent extends cc.ScriptComponent {
 
   onGuestAuth() {
     cc.vv.userMgr.guestAuth();
-    this._guestLoginBtn._clickListeners.length = 0;
-    this._guestLoginBtn._clickListeners.push(() => {
+    this._guestLoginBtn._entity.on('clicked',() => {
       console.warn('Already logined');
     });
   }

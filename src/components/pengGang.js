@@ -2,15 +2,12 @@
 export default class PengGangComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._mjGameNode = null;
-    this._gameRoot = null;
     this._sidePengGangNodes = [];
   }
 
   start() {
     let app = this._app;
-    let node = this._mjGameNode = app.find(this.mjGameNode);
-    this._gameRoot = app.find(this.gameRoot);
+    let node = this._mjGameNode;
 
     node.on('peng_notify', (data) => {
       this.onPengGangChanged(data);
@@ -119,17 +116,62 @@ export default class PengGangComponent extends cc.ScriptComponent {
         if (flag === 'peng' && i === 3) {
           continue;
         }
+
         cc.vv.mahjongmgr.instantiateMjTile(mjID, (err, entity) => {
           if (!err && entity) {
-            entity.setParent(tile);
+            entity.on('ready', () => {
+              entity.setParent(tile);
+              tile.enabled = false;
+              tile.enabled = true;
+              entity.enabled = false;
+              entity.enabled = true;
+            })
           }
-          tile.enabled = false;
-          tile.enabled = true;
-          entity.enabled = false;
-          entity.enabled = true;
         });
       }
     }
     // console.log(`a new ${flag} pai id=${mjID}, index= ${index}, side = ${pengGangNode.parent.name} added`);
   }
+}
+
+PengGangComponent.schema = {
+  gameRoot: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  mjGameNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

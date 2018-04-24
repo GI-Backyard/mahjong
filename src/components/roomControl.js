@@ -3,11 +3,6 @@
 export default class RoomControlComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._menu = null;
-    this._board = null;
-    this._mjGameNode = null;
-    this._alertBoard = null;
-    this._dissolveBoard = null;
     this._dissolveAgree = null;
     this._dissolveReject = null;
     // show status of agree and reject
@@ -19,17 +14,12 @@ export default class RoomControlComponent extends cc.ScriptComponent {
 
   start() {
     let app = this._app;
-    this._mjGameNode = app.find(this.mjGameNode);
-    this._alertBoard = app.find(this.alertBoard);
-    this._dissolveBoard = app.find(this.dissolveBoard);
     let noticeEn = app.find('content', this._dissolveBoard);
     this._noticeLabel = noticeEn && noticeEn.getComp('Text');
-    this._menu = app.find(this.menu);
-    this._board = app.find(this.board);
     let en = null;
     let btn = this._menu.getComp('Button');
     if (btn) {
-      btn._clickListeners.push(() => {
+      btn._entity.on('clicked', () => {
         let enabled = this._board.enabled;
         this._board.enabled = !enabled;
       });
@@ -38,7 +28,7 @@ export default class RoomControlComponent extends cc.ScriptComponent {
     en = app.find('btn_back', this._board);
     btn = en && en.getComp('Button');
     if (btn) {
-      btn._clickListeners.push(() => {
+      btn._entity.on('clicked', () => {
         this.onBtnBackClicked();
         // this._alertBoard.enabled = true;
       });
@@ -47,8 +37,7 @@ export default class RoomControlComponent extends cc.ScriptComponent {
     this._dissolveAgree = en = app.find('btn_agree', this._dissolveBoard);
     btn = en && en.getComp('Button');
     if (btn) {
-      btn._clickListeners.length = 0;
-      btn._clickListeners.push(() => {
+      btn._entity.on('clicked', () => {
         this.onBtnAgreeDissolveClicked();
       });
     }
@@ -56,8 +45,7 @@ export default class RoomControlComponent extends cc.ScriptComponent {
     this._dissolveReject = en = app.find('btn_reject', this._dissolveBoard);
     btn = en && en.getComp('Button');
     if (btn) {
-      btn._clickListeners.length = 0;
-      btn._clickListeners.push(() => {
+      btn._entity.on('clicked', () => {
         this.onBtnRejectDissolveClicked();
       });
     }
@@ -162,4 +150,106 @@ export default class RoomControlComponent extends cc.ScriptComponent {
       }
     }
   }
+}
+
+RoomControlComponent.schema = {
+  menu: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  board: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  alertBoard: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  dissolveBoard: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  mjGameNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

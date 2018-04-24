@@ -3,34 +3,28 @@
 export default class HallComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._createRoomDiag = null;
-    this._joinRoomDiag = null;
-    this._userInfo = null;
   }
 
   start() {
     let app = this._app;
-    this._createRoomDiag = app.find(this.createRoomDiag);
-    this._joinRoomDiag = app.find(this.joinRoomDiag);
 
-    let en = app.find(this.createRoomBtn);
+    let en = this.createRoomBtn;
     let btn = en && en.getComp('Button');
-    btn._clickListeners.push(() => {
+    btn._entity.on('clicked',() => {
       this._createRoomDiag.enabled = true;
     });
 
-    en = app.find(this.joinRoomBtn);
+    en = this.joinRoomBtn;
     btn = en && en.getComp('Button');
-    btn._clickListeners.push(() => {
+    btn._entity.on('clicked',() => {
       this._joinRoomDiag.enabled = true;
     });
 
-    en = app.find(this.matchBtn);
+    en = this.matchBtn;
     btn = en && en.getComp('Button');
-    btn._clickListeners.push(() => {
+    btn._entity.on('clicked',() => {
       console.warn('Mahjong match not implemented.');
     });
-    this._userInfo = app.find(this.userInfo);
     this.showUserInfo();
   }
 
@@ -68,4 +62,126 @@ export default class HallComponent extends cc.ScriptComponent {
       fnEnter();
     }
   }
+}
+
+HallComponent.schema = {
+  createRoomBtn: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  joinRoomBtn: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  matchBtn: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  createRoomDiag: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  joinRoomDiag: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  userInfo: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

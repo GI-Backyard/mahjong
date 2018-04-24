@@ -2,18 +2,13 @@
 export default class ChupaiComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._mjGameNode = null;
-    this._gameRoot = null;
     this._sideChupaiNodes = [];
-    this._chupaiPointer = null;
     this._chupaiPointerPos = cc.math.vec3.create();
   }
 
   start() {
     let app = this._app;
-    let node = this._mjGameNode = app.find(this.mjGameNode);
-    this._gameRoot = app.find(this.gameRoot);
-    this._chupaiPointer = app.find(this.chupaiPointer);
+    let node = this._mjGameNode;
 
     let seatsIndices = ['mine', 'right', 'oppo', 'left'];
     for (let i = 0; i < seatsIndices.length; ++i) {
@@ -99,20 +94,84 @@ export default class ChupaiComponent extends cc.ScriptComponent {
     for (let i = 0; i < folds.length; ++i) {
       cc.vv.mahjongmgr.instantiateMjTile(folds[i], (err, entity) => {
         if (!err && entity) {
-          entity.setParent(sideChupai[i]);
-        }
-        sideChupai[i].enabled = false;
-        sideChupai[i].enabled = true;
-        entity.enabled = false;
-        entity.enabled = true;
-        let pointerTurn = cc.vv.gameNetMgr.gamestart ? cc.vv.gameNetMgr.lastChuPaiTurn : cc.vv.gameNetMgr.turn;
-        if (seatData.seatindex == pointerTurn && i == (folds.length - 1)) {
-          sideChupai[i].getWorldPos(this._chupaiPointerPos);
-          this._chupaiPointer.setWorldPos(this._chupaiPointerPos);
+          entity.on('ready', () => {
+            entity.setParent(sideChupai[i]);
+            sideChupai[i].enabled = false;
+            sideChupai[i].enabled = true;
+            entity.enabled = false;
+            entity.enabled = true;
+            let pointerTurn = cc.vv.gameNetMgr.gamestart ? cc.vv.gameNetMgr.lastChuPaiTurn : cc.vv.gameNetMgr.turn;
+            if (seatData.seatindex == pointerTurn && i == (folds.length - 1)) {
+              sideChupai[i].getWorldPos(this._chupaiPointerPos);
+              this._chupaiPointer.setWorldPos(this._chupaiPointerPos);
+            }
+          });
         }
       });
       // logStr += folds[i] + ((i === (folds.length - 1)) ? ']' : ',');
     }
     // console.log(logStr);
   }
+}
+
+ChupaiComponent.schema = {
+  gameRoot: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  mjGameNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  chupaiPointer: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

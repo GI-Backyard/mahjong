@@ -3,8 +3,6 @@ let { quat } = cc.math;
 export default class TurnPointerComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._mjGameNode = null;
-    this._turnRoot = null;
     this._defaultTurn = null;
     this._turnS = [];
     this._lastActiveTurn = null;
@@ -12,14 +10,13 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
 
   start() {
     let app = this._app;
-    this._turnRoot = app.find(this.turnPointer);
-    this._defaultTurn = app.find('kong', this._turnRoot);
+    this._defaultTurn = app.find('kong', this._turnPointer);
     let turnstring = ['dong', 'nan', 'xi', 'bei'];
-    this._turnS.push(app.find(turnstring[0], this._turnRoot));
-    this._turnS.push(app.find(turnstring[1], this._turnRoot));
-    this._turnS.push(app.find(turnstring[2], this._turnRoot));
-    this._turnS.push(app.find(turnstring[3], this._turnRoot));
-    let node = this._mjGameNode = app.find(this.mjGameNode);
+    this._turnS.push(app.find(turnstring[0], this._turnPointer));
+    this._turnS.push(app.find(turnstring[1], this._turnPointer));
+    this._turnS.push(app.find(turnstring[2], this._turnPointer));
+    this._turnS.push(app.find(turnstring[3], this._turnPointer));
+    let node = this._mjGameNode;
     node.on('game_begin', (data) => {
       this.initRound();
       this.initPointer();
@@ -38,7 +35,7 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
 
   initRound() {
     let index = cc.vv.gameNetMgr.getLocalIndex(0);
-    cc.math.quat.fromEuler(this._turnRoot.lrot, 0, index * 90, 0);
+    cc.math.quat.fromEuler(this._turnPointer.lrot, 0, index * 90, 0);
     console.log('new round start');
   }
 
@@ -69,7 +66,7 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
     // this._pointer.rotation = buttonLocalIndex * -90;
 
     // let index = cc.vv.gameNetMgr.getLocalIndex();
-    // // cc.math.quat.fromEuler(this._turnRoot.lrot, 0, index * 90, 0);
+    // // cc.math.quat.fromEuler(this._turnPointer.lrot, 0, index * 90, 0);
     // for (var i = 0; i < this._pointer.children.length; ++i) {
     //   this._pointer.children[i].active = (i == index);
     // }
@@ -90,4 +87,46 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
       this._lastActiveTurn = this._turnS[index];
     }
   }
+}
+
+TurnPointerComponent.schema = {
+  mjGameNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  turnPointer: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

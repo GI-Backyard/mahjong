@@ -5,7 +5,6 @@ export default class RoomWaiting extends cc.ScriptComponent {
     super();
     // this._waitingSeats = [];
     this._mjSeats = [];
-    this._mjGameNode = null;
   }
 
   start() {
@@ -83,15 +82,17 @@ export default class RoomWaiting extends cc.ScriptComponent {
     let app = this._app;
     let seatsIndices = ['me', 'right', 'top', 'left'];
     // let waitingSeats = app.find(this.waitingSeats);
-    let gameSeats = app.find(this.mjGameSeats);
+    let gameSeats = this.mjGameSeats;
+    if (!gameSeats.enabled) {
+      gameSeats.enabled = true;
+    }
+
     for (let index = 0; index < 4; ++index) {
       // let en = app.find(seatsIndices[index], waitingSeats);
       // this._waitingSeats.push(en && en.getComp('game.seat'));
       let en = app.find(seatsIndices[index], gameSeats);
       this._mjSeats.push(en && en.getComp('game.seat'));
     }
-
-    this._mjGameNode = app.find(this.mjGameNode);
 
     this._initWanfaLabel();
   }
@@ -213,4 +214,46 @@ export default class RoomWaiting extends cc.ScriptComponent {
     // roomid.string = ' 房号:' + cc.vv.gameNetMgr.roomId;
     // wanfa.string = cc.vv.gameNetMgr.getWanfa();
   }
+}
+
+RoomWaiting.schema = {
+  mjGameNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  mjGameSeats: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

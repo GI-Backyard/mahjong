@@ -3,18 +3,18 @@ const dummiesSpriteName = ['hu', 'peng', 'gang', 'guo'];
 export default class GameActionsComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._optionsNode = [];
+    this._optionsNodeArry = [];
     this._optionsSprite = [];
   }
 
   start() {
     let app = this._app;
-    let optRoot = app.find(this.optionsNode);
+    let optRoot = this._optionsNode;
     let index = 0;
     while (index < 10) {
       let opt = app.find(`op_${index}`, optRoot);
       if (opt) {
-        this._optionsNode.push(opt);
+        this._optionsNodeArry.push(opt);
       } else {
         break;
       }
@@ -36,8 +36,7 @@ export default class GameActionsComponent extends cc.ScriptComponent {
       cc.vv.gameNetMgr.curaction = null;
     }
 
-    let gameNode = app.find(this.mjGameNode);
-    gameNode.on("game_action", (data) => {
+    this._mjGameNode.on("game_action", (data) => {
       this.updateOptions(data);
     });
   }
@@ -61,12 +60,12 @@ export default class GameActionsComponent extends cc.ScriptComponent {
       ops.push('guo');
     }
     for (let i = 0; i < ops.length; ++i) {
-      this._optionsNode[i].enabled = true;
-      let img = this._optionsNode[i].getComp('Image');
+      this._optionsNodeArry[i].enabled = true;
+      let img = this._optionsNodeArry[i].getComp('Image');
       img.sprite = this._optionsSprite[dummiesSpriteName.indexOf(ops[i])];
       // update eventmgr
-      let btn = this._optionsNode[i].getComp('Button');
-      btn._clickListeners.push(() => {
+      let btn = this._optionsNodeArry[i].getComp('Button');
+      btn._entity.on('clicked', () => {
         this.onOptsClicked(ops[i], data.pai);
       });
     }
@@ -88,11 +87,54 @@ export default class GameActionsComponent extends cc.ScriptComponent {
   }
 
   clearOptions() {
-    for (let i = 0; i < this._optionsNode.length; ++i) {
-      this._optionsNode[i].enabled = false;
-      let btn = this._optionsNode[i].getComp('Button');
-      btn._clickListeners.length = 0;
+    for (let i = 0; i < this._optionsNodeArry.length; ++i) {
+      this._optionsNodeArry[i].enabled = false;
+      let btn = this._optionsNodeArry[i].getComp('Button');
+      btn._entity.off('clicked', () => {
+        this.onOptsClicked(ops[i], data.pai);
+      });
     }
   }
+}
 
+GameActionsComponent.schema = {
+  optionsNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  mjGameNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

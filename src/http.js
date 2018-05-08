@@ -1,6 +1,6 @@
 // let cc = window.cc;
 cc.VERSION = 20161227;
-let URL = "http://192.168.54.44:9000";
+let URL = "http://192.168.54.60:9000";
 
 let sessionId = 0;
 let userId = 0;

@@ -3,7 +3,6 @@ let _gameType = ['xzdd', 'xlch'];
 export default class createRoomComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._diag = null;
     this._conf = {
       type: _gameType[0],
       for_others: false,
@@ -25,73 +24,71 @@ export default class createRoomComponent extends cc.ScriptComponent {
     let en, comp, checkComp;
     let group;
     checkComp = null;
-    en = app.find(groupName);
+    en = groupName;
     group = en && en.getComp('ToggleGroup');
     for (let i = 0; i < toggles.length; ++i) {
-      en = app.find(toggles[i]);
+      en = toggles[i];
       comp = en && en.getComp('Toggle');
       if (callbacks[i]) {
-        comp._toggleListeners.push(callbacks[i]);
+        comp._entity.on('clicked',callbacks[i]);
       }
       comp.toggleGroup = group;
       checkComp = checkComp || comp;
     }
 
-    checkComp.check();
+    checkComp.checked = true;
   }
 
   _registerSingleToggle(app, name, toggled, callback) {
-    let en = app.find(name);
+    let en = name;
     let comp = en && en.getComp('Toggle');
     if (callback) {
-      comp._toggleListeners.push(callback);
+      comp._entity.on('clicked', callback);
     }
 
     if (toggled) {
-      comp.check();
+      comp.checked = true;
     } else {
-      comp.uncheck();
+      comp.checked = false;
     }
   }
 
   _registerBtn(app, name, callback) {
-    let en = app.find(name);
+    let en = name;
     let comp = en && en.getComp('Button');
     if (callback) {
-      comp._clickListeners.push(callback);
+      comp._entity.on('clicked', callback);
     }
   }
 
   start() {
     let app = this._app;
-    let en = app.find(this.closeBtn);
+    let en = this._closeBtn
     let btn = en && en.getComp('Button');
-    btn._clickListeners.push(() => {
+    btn._entity.on('clicked', () => {
       this.closeDiag();
     });
 
-    this._diag = app.find(this.diag);
-
     // appy wanfa
     this._registerToggleGroup(app, this.wanfaGroup, [this.xzddToggle, this.xlchToggle], [
-      (toggle) => {
-        if (toggle.toggled) {
+      (e) => {
+        if (e.component.checked) {
           this._conf.type = _gameType[0];
         }
-      }, (toggle) => {
-        if (toggle.toggled) {
+      }, (e) => {
+        if (e.component.checked) {
           this._conf.type = _gameType[1];
         }
       }]);
 
     // apply pay
     this._registerToggleGroup(app, this.payGroup, [this.payfzToggle, this.payaaToggle], [
-      (toggle) => {
-        if (toggle.toggled) {
+      (e) => {
+        if (e.component.checked) {
           this._conf.aa = 0;
         }
-      }, (toggle) => {
-        if (toggle.toggled) {
+      }, (e) => {
+        if (e.component.checked) {
           this._conf.aa = 1;
         }
       }
@@ -99,17 +96,17 @@ export default class createRoomComponent extends cc.ScriptComponent {
 
     // apply round
     this._registerToggleGroup(app, this.roundGroup, [this.round4Toggle, this.round8Toggle, this.round16Toggle], [
-      (toggle) => {
-        if (toggle.toggled) {
+      (e) => {
+        if (e.component.checked) {
           this._conf.jushuxuanze = 0;
         }
-      }, (toggle) => {
-        if (toggle.toggled) {
+      }, (e) => {
+        if (e.component.checked) {
           this._conf.jushuxuanze = 1;
         }
 
-      }, (toggle) => {
-        if (toggle.toggled) {
+      }, (e) => {
+        if (e.component.checked) {
           this._conf.jushuxuanze = 2;
         }
       }
@@ -117,17 +114,17 @@ export default class createRoomComponent extends cc.ScriptComponent {
 
     // apply times
     this._registerToggleGroup(app, this.timesGroup, [this.time2Toggle, this.time3Toggle, this.time4Toggle], [
-      (toggle) => {
-        if (toggle.toggled) {
+      (e) => {
+        if (e.component.checked) {
           this._conf.zuidafanshu = 0;
         }
-      }, (toggle) => {
-        if (toggle.toggled) {
+      }, (e) => {
+        if (e.component.checked) {
           this._conf.zuidafanshu = 1;
         }
 
-      }, (toggle) => {
-        if (toggle.toggled) {
+      }, (e) => {
+        if (e.component.checked) {
           this._conf.zuidafanshu = 2;
         }
       }
@@ -135,12 +132,12 @@ export default class createRoomComponent extends cc.ScriptComponent {
 
     // apply zm
     this._registerToggleGroup(app, this.zimoGroup, [this.zimojdToggle, this.zimojfToggle], [
-      (toggle) => {
-        if (toggle.toggled) {
+      (e) => {
+        if (e.component.checked) {
           this._conf.zimo = 0;
         }
-      }, (toggle) => {
-        if (toggle.toggled) {
+      }, (e) => {
+        if (e.component.checked) {
           this._conf.zimo = 1;
         }
       }
@@ -148,48 +145,48 @@ export default class createRoomComponent extends cc.ScriptComponent {
 
     // apply dian gang hua
     this._registerToggleGroup(app, this.dghGroup, [this.dghfpToggle, this.dghzmToggle], [
-      (toggle) => {
-        if (toggle.toggled) {
+      (e) => {
+        if (e.component.checked) {
           this._conf.dianganghua = 0;
         }
-      }, (toggle) => {
-        if (toggle.toggled) {
+      }, (e) => {
+        if (e.component.checked) {
           this._conf.dianganghua = 1;
         }
       }
     ]);
 
     // apply single toggles
-    this._registerSingleToggle(app, this.hszToggle, this._conf.huansanzhang, (toggle) => {
-      if (toggle.toggled) {
+    this._registerSingleToggle(app, this.hszToggle, this._conf.huansanzhang, (e) => {
+      if (e.component.checked) {
         this._conf.huansanzhang = true;
       } else {
         this._conf.huansanzhang = false;
       }
     });
-    this._registerSingleToggle(app, this.yjjdToggle, this._conf.jiangdui, (toggle) => {
-      if (toggle.toggled) {
+    this._registerSingleToggle(app, this.yjjdToggle, this._conf.jiangdui, (e) => {
+      if (e.component.checked) {
         this._conf.jiangdui = true;
       } else {
         this._conf.jiangdui = false;
       }
     });
-    this._registerSingleToggle(app, this.mqzzToggle, this._conf.menqing, (toggle) => {
-      if (toggle.toggled) {
+    this._registerSingleToggle(app, this.mqzzToggle, this._conf.menqing, (e) => {
+      if (e.component.checked) {
         this._conf.menqing = true;
       } else {
         this._conf.menqing = false;
       }
     });
-    this._registerSingleToggle(app, this.tdhToggle, this._conf.tiandihu, (toggle) => {
-      if (toggle.toggled) {
+    this._registerSingleToggle(app, this.tdhToggle, this._conf.tiandihu, (e) => {
+      if (e.component.checked) {
         this._conf.tiandihu = true;
       } else {
         this._conf.tiandihu = false;
       }
     });
-    this._registerSingleToggle(app, this.fzbToggle, this._conf.ipstrict, (toggle) => {
-      if (toggle.toggled) {
+    this._registerSingleToggle(app, this.fzbToggle, this._conf.ipstrict, (e) => {
+      if (e.component.checked) {
         this._conf.ipstrict = true;
       } else {
         this._conf.ipstrict = false;
@@ -277,4 +274,586 @@ export default class createRoomComponent extends cc.ScriptComponent {
 
   tick() {
   }
+}
+
+createRoomComponent.schema = {
+  closeBtn: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  diag: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  wanfaGroup: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  xzddToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  xlchToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  payGroup: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  payfzToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  payaaToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  roundGroup: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  round4Toggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  round8Toggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  round16Toggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  timesGroup: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  time2Toggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  time3Toggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  time4Toggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  zimoGroup: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  zimojdToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  zimojfToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  dghGroup: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  dghfpToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  dghzmToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  hszToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  yjjdToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  mqzzToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  tdhToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  fzbToggle: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  createRoomBtn: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  createRoomForOthersBtn: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

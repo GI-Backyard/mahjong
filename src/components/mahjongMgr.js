@@ -86,7 +86,7 @@ export default class MahJongMgr extends cc.ScriptComponent {
       if (err) {
         callback && callback(err, null);
       } else {
-        let en = asset.instantiate();
+        let en = asset.instantiate(null, app._activeLevel);
         if (en) {
           callback && callback(null, en);
         } else {
@@ -139,3 +139,227 @@ export default class MahJongMgr extends cc.ScriptComponent {
     });
   }
 }
+
+MahJongMgr.schema = {
+  dummy_tiles: {
+    type: 'object',
+    default: null,
+  },
+
+  Dot_1: {
+    type: 'string',
+    default: '',
+  },
+
+  Dot_2: {
+    type: 'string',
+    default: '',
+  },
+
+  Dot_3: {
+    type: 'string',
+    default: '',
+  },
+
+  Dot_4: {
+    type: 'string',
+    default: '',
+  },
+
+  Dot_5: {
+    type: 'string',
+    default: '',
+  },
+
+  Dot_6: {
+    type: 'string',
+    default: '',
+  },
+
+  Dot_7: {
+    type: 'string',
+    default: '',
+  },
+
+  Dot_8: {
+    type: 'string',
+    default: '',
+  },
+
+  Dot_9: {
+    type: 'string',
+    default: '',
+  },
+
+  Bam_1: {
+    type: 'string',
+    default: '',
+  },
+
+  Bam_2: {
+    type: 'string',
+    default: '',
+  },
+
+  Bam_3: {
+    type: 'string',
+    default: '',
+  },
+
+  Bam_4: {
+    type: 'string',
+    default: '',
+  },
+
+  Bam_5: {
+    type: 'string',
+    default: '',
+  },
+
+  Bam_6: {
+    type: 'string',
+    default: '',
+  },
+
+  Bam_7: {
+    type: 'string',
+    default: '',
+  },
+
+  Bam_8: {
+    type: 'string',
+    default: '',
+  },
+
+  Bam_9: {
+    type: 'string',
+    default: '',
+  },
+
+  Crak_1: {
+    type: 'string',
+    default: '',
+  },
+
+  Crak_2: {
+    type: 'string',
+    default: '',
+  },
+
+  Crak_3: {
+    type: 'string',
+    default: '',
+  },
+
+  Crak_4: {
+    type: 'string',
+    default: '',
+  },
+
+  Crak_5: {
+    type: 'string',
+    default: '',
+  },
+
+  Crak_6: {
+    type: 'string',
+    default: '',
+  },
+
+  Crak_7: {
+    type: 'string',
+    default: '',
+  },
+
+  Crak_8: {
+    type: 'string',
+    default: '',
+  },
+
+  Crak_9: {
+    type: 'string',
+    default: '',
+  },
+
+  Wind_East: {
+    type: 'string',
+    default: '',
+  },
+
+  Wind_North: {
+    type: 'string',
+    default: '',
+  },
+
+  Wind_West: {
+    type: 'string',
+    default: '',
+  },
+
+  Wind_South: {
+    type: 'string',
+    default: '',
+  },
+
+  Dragon_Red: {
+    type: 'string',
+    default: '',
+  },
+
+  Dragon_Green: {
+    type: 'string',
+    default: '',
+  },
+
+  Dragon_White: {
+    type: 'string',
+    default: '',
+  },
+
+  Dragon_Blank: {
+    type: 'string',
+    default: '',
+  },
+
+  Flower_1: {
+    type: 'string',
+    default: '',
+  },
+
+  Flower_2: {
+    type: 'string',
+    default: '',
+  },
+
+  Flower_3: {
+    type: 'string',
+    default: '',
+  },
+
+  Flower_4: {
+    type: 'string',
+    default: '',
+  },
+
+  Season_1: {
+    type: 'string',
+    default: '',
+  },
+
+  Season_2: {
+    type: 'string',
+    default: '',
+  },
+
+  Season_3: {
+    type: 'string',
+    default: '',
+  },
+
+  Season_4: {
+    type: 'string',
+    default: '',
+  },
+};
+
+

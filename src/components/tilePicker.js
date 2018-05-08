@@ -7,21 +7,18 @@ export default class TilePickerComponent extends cc.ScriptComponent {
     super();
     this._tiles = new Array(14);
     this._mainCamera = null;
-    this._mjGameNode = null;
   }
 
   start() {
     let app = this._app;
-    let holds = app.find(this.holds);
-    if (holds) {
+    if (this.holds) {
       for (let i = 0; i < 14; ++i) {
         let name = `tick${i}`;
-        let en = app.find(name, holds);
+        let en = app.find(name, this.holds);
         this._tiles[i] = { key: name, entity: en, index: i };
       }
     }
-    this._mainCamera = app.find(this.camera);
-    this._mjGameNode = app.find(this.mjGameNode);
+    this._mainCamera = this.camera;
   }
 
   isAvailbleTile(en) {
@@ -59,5 +56,66 @@ export default class TilePickerComponent extends cc.ScriptComponent {
       }
     }
   }
+}
 
+TilePickerComponent.schema = {
+  holds: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  camera: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  mjGameNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

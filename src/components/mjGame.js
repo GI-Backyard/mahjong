@@ -38,10 +38,6 @@ function computeTypeCount(sd) {
 export default class MJGameComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._main3D = null;
-    this._mainUI = null;
-    // this._waitingUI = null;
-
     this._myHoldsPai = [];
     this._myHolds = null;
     window.g_mjgame = this;
@@ -90,8 +86,8 @@ export default class MJGameComponent extends cc.ScriptComponent {
 
   _initView() {
     let app = this._app;
-    this._main3D = app.find(this.main_3d);
-    this._mainUI = app.find(this.main_ui);
+    this._main3D = this.main_3d;
+    this._mainUI = this.main_ui;
     // this._waitingUI = app.find(this.waiting_ui);
     let en = app.find('roundInfo', this._mainUI);
     this._roundInfo = en && en.getComp('Text');
@@ -354,21 +350,23 @@ export default class MJGameComponent extends cc.ScriptComponent {
       cc.vv.mahjongmgr.instantiateMjTile(pai, (err, entity) => {
         if (!err && entity) {
           // clear all children
-          let children = [];
-          for (let i = 0; i < sideHolds[13].children.length; ++i) {
-            children.push(sideHolds[13].children[i]);
-          }
-          for (let i = 0; i < children.length; ++i) {
-            children[i].setParent(null);
-          }
+          entity.on('ready', () => {
+            let children = [];
+            for (let i = 0; i < sideHolds[13].children.length; ++i) {
+              children.push(sideHolds[13].children[i]);
+            }
+            for (let i = 0; i < children.length; ++i) {
+              children[i].setParent(null);
+            }
 
-          entity.setParent(sideHolds[13]);
-          cc.math.quat.fromEuler(entity.lrot, -90, 0, 0);
-          // entity.lpos.x = entity.lpos.x;
-          sideHolds[13].enabled = false;
-          sideHolds[13].enabled = true;
-          entity.enabled = false;
-          entity.enabled = true;
+            entity.setParent(sideHolds[13]);
+            cc.math.quat.fromEuler(entity.lrot, -90, 0, 0);
+            // entity.lpos.x = entity.lpos.x;
+            sideHolds[13].enabled = false;
+            sideHolds[13].enabled = true;
+            entity.enabled = false;
+            entity.enabled = true;
+          });
         }
       });
     });
@@ -385,22 +383,24 @@ export default class MJGameComponent extends cc.ScriptComponent {
         // let en = this._myHolds[13];
         cc.vv.mahjongmgr.instantiateMjTile(pai, (err, entity) => {
           if (!err && entity) {
-            if (this._myHoldsPai[13].children.length === 1) {
-              let oldChild = this._myHoldsPai[13].children[0];
-              oldChild.setParent(null);
-            } else {
-              console.error('A fatal error for mopai exists!');
-            }
+            entity.on('ready', () => {
+              if (this._myHoldsPai[13].children.length === 1) {
+                let oldChild = this._myHoldsPai[13].children[0];
+                oldChild.setParent(null);
+              } else {
+                console.error('A fatal error for mopai exists!');
+              }
 
-            entity.setParent(this._myHoldsPai[13]);
-            this._myHoldsPai[13].enabled = false;
-            this._myHoldsPai[13].enabled = true;
-            entity.enabled = false;
-            entity.enabled = true;
-            if (this.checkQue(pai)) {
-              this._queIndices.push(13);
-              entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
-            }
+              entity.setParent(this._myHoldsPai[13]);
+              this._myHoldsPai[13].enabled = false;
+              this._myHoldsPai[13].enabled = true;
+              entity.enabled = false;
+              entity.enabled = true;
+              if (this.checkQue(pai)) {
+                this._queIndices.push(13);
+                entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
+              }
+            });
           }
         });
         // var sprite = self._myMJArr[index];
@@ -941,11 +941,13 @@ export default class MJGameComponent extends cc.ScriptComponent {
     for (let i = num; i < holdsPai.length; ++i) {
       cc.vv.mahjongmgr.instantiateMjTile(0, (err, entity) => {
         if (!err && entity) {
-          entity.setParent(holdsPai[i]);
-          holdsPai[i].enabled = false;
-          holdsPai[i].enabled = true;
-          entity.enabled = false;
-          entity.enabled = true;
+          entity.on('ready', () => {
+            entity.setParent(holdsPai[i]);
+            holdsPai[i].enabled = false;
+            holdsPai[i].enabled = true;
+            entity.enabled = false;
+            entity.enabled = true;
+          });
         }
       });
     }
@@ -958,11 +960,13 @@ export default class MJGameComponent extends cc.ScriptComponent {
         var idx = i + num;
         cc.vv.mahjongmgr.instantiateMjTile(holds[i], (err, entity) => {
           if (!err && entity) {
-            entity.setParent(holdsPai[idx]);
-            holdsPai[idx].enabled = false;
-            holdsPai[idx].enabled = true;
-            entity.enabled = false;
-            entity.enabled = true;
+            entity.on('ready', () => {
+              entity.setParent(holdsPai[idx]);
+              holdsPai[idx].enabled = false;
+              holdsPai[idx].enabled = true;
+              entity.enabled = false;
+              entity.enabled = true;
+            });
           }
         });
       }
@@ -1133,16 +1137,19 @@ export default class MJGameComponent extends cc.ScriptComponent {
       let mjid = holds[i];
       cc.vv.mahjongmgr.instantiateMjTile(mjid, (err, entity) => {
         if (!err && entity) {
-          this._myHoldsPai[i + lackingNum].children.length = 0;
-          entity.setParent(this._myHoldsPai[i + lackingNum]);
-          this._myHoldsPai[i + lackingNum].enabled = false;
-          this._myHoldsPai[i + lackingNum].enabled = true;
-          entity.enabled = false;
-          entity.enabled = true;
-        }
-        if (this.checkQue(mjid)) {
-          this._queIndices.push(i + lackingNum);
-          entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
+          entity.on('ready', () => {
+            this._myHoldsPai[i + lackingNum].children.length = 0;
+            entity.setParent(this._myHoldsPai[i + lackingNum]);
+            this._myHoldsPai[i + lackingNum].enabled = false;
+            this._myHoldsPai[i + lackingNum].enabled = true;
+            entity.enabled = false;
+            entity.enabled = true;
+
+            if (this.checkQue(mjid)) {
+              this._queIndices.push(i + lackingNum);
+              entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
+            }
+          });
         }
       });
       // var sprite = this._myMJArr[i + lackingNum];
@@ -1623,5 +1630,67 @@ export default class MJGameComponent extends cc.ScriptComponent {
         }
         break;
     }
+  }
+}
+
+MJGameComponent.schema = {
+  main_3d: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  main_ui: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  waiting_ui: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
   }
 }

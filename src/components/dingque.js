@@ -3,10 +3,8 @@
 export default class DingQueComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._dingQueRoot = null;
     this._dingqueTips = [];
     this._queBtns = []; // tong, tiao, wan order
-    this._mjGameNode = null;
   }
 
   start() {
@@ -17,27 +15,25 @@ export default class DingQueComponent extends cc.ScriptComponent {
     this.initDingQue();
     this.initEventHandlers();
 
-    console.error(`DingQue component is implementing`);
+    // console.error(`DingQue component is implementing`);
   }
 
   initView() {
     let app = this._app;
-    this._dingQueRoot = app.find(this.dingqueRoot);
-    this._dingQueRoot.enabled = cc.vv.gameNetMgr.isDingQueing;
-    this._mjGameNode = app.find(this.mjGameNode);
+    this._dingqueRoot.enabled = cc.vv.gameNetMgr.isDingQueing;
 
-    this._queBtns.push(app.find('tong_sel/tong', this._dingQueRoot));
-    this._queBtns.push(app.find('tiao_sel/tiao', this._dingQueRoot));
-    this._queBtns.push(app.find('wan_sel/wan', this._dingQueRoot));
+    this._queBtns.push(app.find('tong_sel/tong', this._dingqueRoot));
+    this._queBtns.push(app.find('tiao_sel/tiao', this._dingqueRoot));
+    this._queBtns.push(app.find('wan_sel/wan', this._dingqueRoot));
 
     let sideOrder = ['myself', 'right', 'up', 'left'];
     for (let i = 0; i < sideOrder.length; ++i) {
-      this._dingqueTips.push(app.find(sideOrder[i], this._dingQueRoot));
+      this._dingqueTips.push(app.find(sideOrder[i], this._dingqueRoot));
     }
     for (let i = 0; i < this._queBtns.length; ++i) {
       let btn = this._queBtns[i] && this._queBtns[i].getComp('Button');
       if (btn) {
-        btn._clickListeners.push(() => {
+        btn._entity.on('clicked', () => {
           this.onDingQueSelected(i);
         });
       }
@@ -101,7 +97,7 @@ export default class DingQueComponent extends cc.ScriptComponent {
     this._mjGameNode.on('game_dingque_finish', function () {
       //通知每一个玩家定缺的花色
       // self.queYiMen.active = false;
-      self._dingQueRoot.enabled = false;
+      self._dingqueRoot.enabled = false;
       cc.vv.gameNetMgr.isDingQueing = false;
       // self.initDingQue();
     });
@@ -110,7 +106,7 @@ export default class DingQueComponent extends cc.ScriptComponent {
   showDingQueChoice() {
     // this._keep_out.active = true;//关闭触摸
     // this.queYiMen.active = true;
-    this._dingQueRoot.enabled = true;
+    this._dingqueRoot.enabled = true;
     //还原上盘被定缺消失的麻将
     for (let i = 0; i < this._queBtns.length; ++i) {
       this._queBtns[i].enabled = true;
@@ -229,4 +225,46 @@ export default class DingQueComponent extends cc.ScriptComponent {
 
   // tick() {
   // }
+}
+
+DingQueComponent.schema = {
+  dingqueRoot: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  mjGameNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

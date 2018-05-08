@@ -2,30 +2,23 @@
 export default class RoundOverComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._mjGameNode = null;
-    this._roundUI = null;
-    this._okBtn = null;
-    this._gameResultUI = null;
     this._isGameEnd = false;
   }
 
   start() {
     let app = this._app;
-    let node = this._mjGameNode = app.find(this.mjGameNode);
-    this._roundUI = app.find(this.uiRoot);
-    this._okBtn = app.find(this.okBtn);
-    this._gameResultUI = app.find(this.gameResultUI);
+    let node = this._mjGameNode;
 
     let btn = this._okBtn && this._okBtn.getComp('Button');
     if (btn) {
-      btn._clickListeners.push(() => {
+      btn._entity.on('clicked', () => {
         if (this._isGameEnd) {
           this._gameResultUI.enabled = true;
         }
         else {
           cc.vv.net.send('ready');
         }
-        this._roundUI.enabled = false;
+        this._uiRoot.enabled = false;
       })
     }
 
@@ -39,7 +32,88 @@ export default class RoundOverComponent extends cc.ScriptComponent {
   }
 
   onGameOver(data) {
-    this._roundUI.enabled = true;
+    this._uiRoot.enabled = true;
   }
+}
 
+RoundOverComponent.schema = {
+  mjGameNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  uiRoot: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  okBtn: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  gameResultUI: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

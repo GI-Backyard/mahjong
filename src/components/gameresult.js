@@ -3,18 +3,14 @@
 export default class GameResultComponent extends cc.ScriptComponent {
   constructor() {
     super();
-    this._diag = null;
-    this._mjGameNode = null;
   }
 
   start() {
     let app = this._app;
-    this._mjGameNode = app.find(this.mjGameNode);
-    this._diag = app.find(this.diag);
     let en = app.find('game_result/btn_ok', this._diag);
     let btn = en && en.getComp('Button');
     if (btn) {
-      btn._clickListeners.push(() => {
+      btn._entity.on('clicked',() => {
         cc.game.loadScene('hall');
       })
     }
@@ -24,4 +20,46 @@ export default class GameResultComponent extends cc.ScriptComponent {
     })
   }
 
+}
+
+GameResultComponent.schema = {
+  diag: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
+
+  mjGameNode: {
+    type: 'object',
+    default: null,
+    parse(app, value, propInfo, entities) {
+      if (entities) {
+        if (propInfo.type === 'object' && value) {
+          let entIdx = value.indexOf('e');
+          if (entIdx !== -1) {
+            value = value.split('e').join('');
+          }
+
+          entIdx = parseInt(value);
+          return entities[entIdx];
+        }
+      }
+
+      return value;
+    },
+  },
 }

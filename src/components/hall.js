@@ -66,122 +66,32 @@ export default class HallComponent extends cc.ScriptComponent {
 
 HallComponent.schema = {
   createRoomBtn: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   joinRoomBtn: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   matchBtn: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   createRoomDiag: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   joinRoomDiag: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   userInfo: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 }

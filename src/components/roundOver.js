@@ -38,82 +38,22 @@ export default class RoundOverComponent extends cc.ScriptComponent {
 
 RoundOverComponent.schema = {
   mjGameNode: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   uiRoot: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   okBtn: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   gameResultUI: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 }

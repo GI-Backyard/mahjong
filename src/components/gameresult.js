@@ -24,42 +24,12 @@ export default class GameResultComponent extends cc.ScriptComponent {
 
 GameResultComponent.schema = {
   diag: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   mjGameNode: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 }

@@ -81,13 +81,13 @@ export default class CreateRoleSexComponent extends cc.ScriptComponent {
     this._submitBtn = en && en.getComp('Button');
 
     // todo: register callbacks
-    this._maleToggle._entity.on('clicked', (e) => {
+    this._maleToggle._entity.on('change', (e) => {
       if (e.component.checked) {
         this._sex = 'male';
       }
     });
 
-    this._femaleToggle._entity.on('clicked', (e) => {
+    this._femaleToggle._entity.on('change', (e) => {
       if (e.component.checked) {
         this._sex = 'female';
       }
@@ -118,122 +118,32 @@ export default class CreateRoleSexComponent extends cc.ScriptComponent {
 
 CreateRoleSexComponent.schema = {
   femaleToggle: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   maleToggle: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   toggleGroup: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   randomBtn: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   submit: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   nameTable: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 }

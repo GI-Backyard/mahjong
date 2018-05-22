@@ -88,7 +88,6 @@ export default class MJGameComponent extends cc.ScriptComponent {
     let app = this._app;
     this._main3D = this.main_3d;
     this._mainUI = this.main_ui;
-    // this._waitingUI = app.find(this.waiting_ui);
     let en = app.find('roundInfo', this._mainUI);
     this._roundInfo = en && en.getComp('Text');
     // init holds
@@ -1643,9 +1642,4 @@ MJGameComponent.schema = {
     type: 'entity',
     default: null,
   },
-
-  waiting_ui: {
-    type: 'entity',
-    default: null,
-  }
 }

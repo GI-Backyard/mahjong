@@ -82,11 +82,11 @@ export default class DingQueComponent extends cc.ScriptComponent {
 
   initEventHandlers() {
     var self = this;
-    this._mjGameNode.on('game_dingque', function (data) {
+    this._entity.on('game_dingque', function (data) {
       self.showDingQueChoice();
     });
 
-    this._mjGameNode.on('game_dingque_notify', function (data) {
+    this._entity.on('game_dingque_notify', function (data) {
       var seatIndex = cc.vv.gameNetMgr.getSeatIndexByID(data.detail);
       var localIndex = cc.vv.gameNetMgr.getLocalIndex(seatIndex);
       console.log("game_dingque_notify:" + localIndex);
@@ -94,7 +94,7 @@ export default class DingQueComponent extends cc.ScriptComponent {
       // self.tips[localIndex].node.active = true;
     });
 
-    this._mjGameNode.on('game_dingque_finish', function () {
+    this._entity.on('game_dingque_finish', function () {
       //通知每一个玩家定缺的花色
       // self.queYiMen.active = false;
       self._dingqueRoot.enabled = false;

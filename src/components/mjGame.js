@@ -1635,62 +1635,17 @@ export default class MJGameComponent extends cc.ScriptComponent {
 
 MJGameComponent.schema = {
   main_3d: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   main_ui: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   },
 
   waiting_ui: {
-    type: 'object',
+    type: 'entity',
     default: null,
-    parse(app, value, propInfo, entities) {
-      if (entities) {
-        if (propInfo.type === 'object' && value) {
-          let entIdx = value.indexOf('e');
-          if (entIdx !== -1) {
-            value = value.split('e').join('');
-          }
-
-          entIdx = parseInt(value);
-          return entities[entIdx];
-        }
-      }
-
-      return value;
-    },
   }
 }

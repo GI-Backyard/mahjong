@@ -8,7 +8,7 @@ export default class ChupaiComponent extends cc.ScriptComponent {
 
   start() {
     let app = this._app;
-    let node = this._mjGameNode;
+    let node = this._entity;
 
     let seatsIndices = ['mine', 'right', 'oppo', 'left'];
     for (let i = 0; i < seatsIndices.length; ++i) {
@@ -116,11 +116,6 @@ export default class ChupaiComponent extends cc.ScriptComponent {
 
 ChupaiComponent.schema = {
   gameRoot: {
-    type: 'entity',
-    default: null,
-  },
-
-  mjGameNode: {
     type: 'entity',
     default: null,
   },

@@ -16,7 +16,7 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
     this._turnS.push(app.find(turnstring[1], this._turnPointer));
     this._turnS.push(app.find(turnstring[2], this._turnPointer));
     this._turnS.push(app.find(turnstring[3], this._turnPointer));
-    let node = this._mjGameNode;
+    let node = this._entity;
     node.on('game_begin', (data) => {
       this.initRound();
       this.initPointer();
@@ -90,11 +90,6 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
 }
 
 TurnPointerComponent.schema = {
-  mjGameNode: {
-    type: 'entity',
-    default: null,
-  },
-
   turnPointer: {
     type: 'entity',
     default: null,

@@ -13,12 +13,12 @@ export default class RoundOverComponent extends cc.ScriptComponent {
     if (btn) {
       btn._entity.on('clicked', () => {
         if (this._isGameEnd) {
-          this._gameResultUI.enabled = true;
+          this._gameResultUI.active = true;
         }
         else {
           cc.vv.net.send('ready');
         }
-        this._uiRoot.enabled = false;
+        this._uiRoot.active = false;
       })
     }
 
@@ -32,7 +32,7 @@ export default class RoundOverComponent extends cc.ScriptComponent {
   }
 
   onGameOver(data) {
-    this._uiRoot.enabled = true;
+    this._uiRoot.active = true;
   }
 }
 

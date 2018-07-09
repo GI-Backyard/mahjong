@@ -60,7 +60,7 @@ export default class GameActionsComponent extends cc.ScriptComponent {
       ops.push('guo');
     }
     for (let i = 0; i < ops.length; ++i) {
-      this._optionsNodeArry[i].enabled = true;
+      this._optionsNodeArry[i].active = true;
       let img = this._optionsNodeArry[i].getComp('Image');
       img.sprite = this._optionsSprite[dummiesSpriteName.indexOf(ops[i])];
       // update eventmgr
@@ -88,7 +88,7 @@ export default class GameActionsComponent extends cc.ScriptComponent {
 
   clearOptions() {
     for (let i = 0; i < this._optionsNodeArry.length; ++i) {
-      this._optionsNodeArry[i].enabled = false;
+      this._optionsNodeArry[i].active = false;
       let btn = this._optionsNodeArry[i].getComp('Button');
       btn._entity.off('clicked', () => {
         this.onOptsClicked(ops[i], data.pai);

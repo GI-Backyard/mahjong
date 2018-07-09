@@ -119,13 +119,11 @@ export default class PengGangComponent extends cc.ScriptComponent {
 
         cc.vv.mahjongmgr.instantiateMjTile(mjID, (err, entity) => {
           if (!err && entity) {
-            entity.on('ready', () => {
-              entity.setParent(tile);
-              tile.enabled = false;
-              tile.enabled = true;
-              entity.enabled = false;
-              entity.enabled = true;
-            })
+            entity.setParent(tile);
+            tile.active = false;
+            tile.active = true;
+            entity.active = false;
+            entity.active = true;
           }
         });
       }

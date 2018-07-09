@@ -19,8 +19,8 @@ export default class TestPickComponent extends cc.ScriptComponent {
   tick() {
     let input = this._app._input;
     if (input.hasMouseDown) {
-      let target = cc.math.vec3.create();
-      let pos = cc.math.vec3.create();
+      let target = cc.math.vec3.zero();
+      let pos = cc.math.vec3.zero();
       let mat = cc.math.mat4.create();
       this._tile.getWorldMatrix(mat);
       cc.math.mat4.invert(mat, mat);
@@ -34,7 +34,7 @@ export default class TestPickComponent extends cc.ScriptComponent {
       // this.getPickRay(ray, this._mainCamera, input.mouseX, input.mouseY, this._app._canvas.width, this._app._canvas.height);
       console.log(`ray ori is (${ray.o.x},${ray.o.y}, ${ray.o.z})`);
       console.log(`ray dir is (${ray.d.x},${ray.d.y}, ${ray.d.z})`);
-      let intersectPt = cc.math.vec3.create();
+      let intersectPt = cc.math.vec3.zero();
       let result = false;
       result = cc.geometry.intersect.ray_box(ray, this._box, intersectPt);
       console.log(` tile is ${result ? '' : 'not'} picked!`);

@@ -28,11 +28,11 @@ export default class TilePickerComponent extends cc.ScriptComponent {
   tick() {
     let input = this._app._input;
     if (input.hasMouseDown) {
-      let target = cc.math.vec3.create();
-      let pos = cc.math.vec3.create();
+      let target = cc.math.vec3.zero();
+      let pos = cc.math.vec3.zero();
       let mat = cc.math.mat4.create();
-      let rayTargetLocal = cc.math.vec3.create();
-      let rayPosLocal = cc.math.vec3.create();
+      let rayTargetLocal = cc.math.vec3.zero();
+      let rayPosLocal = cc.math.vec3.zero();
       let ray = cc.geometry.ray.create();
       // this._tile.getWorldMatrix(mat);
       // 
@@ -46,7 +46,7 @@ export default class TilePickerComponent extends cc.ScriptComponent {
         cc.math.vec3.transformMat4(rayPosLocal, pos, mat);
         cc.math.vec3.transformMat4(rayTargetLocal, target, mat);
         cc.geometry.ray.fromPoints(ray, rayPosLocal, rayTargetLocal);
-        let intersectPt = cc.math.vec3.create();
+        let intersectPt = cc.math.vec3.zero();
         let result = false;
         result = cc.geometry.intersect.ray_box(ray, tileBox, intersectPt);
         if (result && this._mjGameNode) {

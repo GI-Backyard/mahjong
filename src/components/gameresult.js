@@ -16,7 +16,7 @@ export default class GameResultComponent extends cc.ScriptComponent {
     }
 
     this._mjGameNode.on('game_end', () => {
-      this._diag.enabled = true;
+      this._diag.active = true;
     })
   }
 

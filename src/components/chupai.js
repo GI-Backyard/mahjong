@@ -3,7 +3,7 @@ export default class ChupaiComponent extends cc.ScriptComponent {
   constructor() {
     super();
     this._sideChupaiNodes = [];
-    this._chupaiPointerPos = cc.math.vec3.create();
+    this._chupaiPointerPos = cc.math.vec3.zero();
   }
 
   start() {
@@ -94,18 +94,15 @@ export default class ChupaiComponent extends cc.ScriptComponent {
     for (let i = 0; i < folds.length; ++i) {
       cc.vv.mahjongmgr.instantiateMjTile(folds[i], (err, entity) => {
         if (!err && entity) {
-          entity.on('ready', () => {
-            entity.setParent(sideChupai[i]);
-            sideChupai[i].enabled = false;
-            sideChupai[i].enabled = true;
-            entity.enabled = false;
-            entity.enabled = true;
-            let pointerTurn = cc.vv.gameNetMgr.gamestart ? cc.vv.gameNetMgr.lastChuPaiTurn : cc.vv.gameNetMgr.turn;
-            if (seatData.seatindex == pointerTurn && i == (folds.length - 1)) {
-              sideChupai[i].getWorldPos(this._chupaiPointerPos);
-              this._chupaiPointer.setWorldPos(this._chupaiPointerPos);
-            }
-          });
+          entity.setParent(sideChupai[i]);
+          entity.active = false;
+          entity.active = true;
+          let pointerTurn = cc.vv.gameNetMgr.gamestart ? cc.vv.gameNetMgr.lastChuPaiTurn : cc.vv.gameNetMgr.turn;
+          if (seatData.seatindex == pointerTurn && i == (folds.length - 1)) {
+            sideChupai[i].getWorldPos(this._chupaiPointerPos);
+            this._chupaiPointer.setWorldPos(this._chupaiPointerPos);
+          }
+
         }
       });
       // logStr += folds[i] + ((i === (folds.length - 1)) ? ']' : ',');

@@ -20,7 +20,7 @@ export default class DingQueComponent extends cc.ScriptComponent {
 
   initView() {
     let app = this._app;
-    this._dingqueRoot.enabled = cc.vv.gameNetMgr.isDingQueing;
+    this._dingqueRoot.active = cc.vv.gameNetMgr.isDingQueing;
 
     this._queBtns.push(app.find('tong_sel/tong', this._dingqueRoot));
     this._queBtns.push(app.find('tiao_sel/tiao', this._dingqueRoot));
@@ -72,7 +72,7 @@ export default class DingQueComponent extends cc.ScriptComponent {
       btn.parent.getComp('Image').enabled = true;
     }
     for (let i = 0; i < this._queBtns.length; ++i) {
-      this._queBtns[i].enabled = false;
+      this._queBtns[i].active = false;
     }
 
     // todo send game logic msg
@@ -90,14 +90,14 @@ export default class DingQueComponent extends cc.ScriptComponent {
       var seatIndex = cc.vv.gameNetMgr.getSeatIndexByID(data.detail);
       var localIndex = cc.vv.gameNetMgr.getLocalIndex(seatIndex);
       console.log("game_dingque_notify:" + localIndex);
-      self._dingqueTips[localIndex].enabled = true;
+      self._dingqueTips[localIndex].active = true;
       // self.tips[localIndex].node.active = true;
     });
 
     this._entity.on('game_dingque_finish', function () {
       //通知每一个玩家定缺的花色
       // self.queYiMen.active = false;
-      self._dingqueRoot.enabled = false;
+      self._dingqueRoot.active = false;
       cc.vv.gameNetMgr.isDingQueing = false;
       // self.initDingQue();
     });
@@ -106,10 +106,10 @@ export default class DingQueComponent extends cc.ScriptComponent {
   showDingQueChoice() {
     // this._keep_out.active = true;//关闭触摸
     // this.queYiMen.active = true;
-    this._dingqueRoot.enabled = true;
+    this._dingqueRoot.active = true;
     //还原上盘被定缺消失的麻将
     for (let i = 0; i < this._queBtns.length; ++i) {
-      this._queBtns[i].enabled = true;
+      this._queBtns[i].active = true;
     }
     // this.dingques_item[0].active = true;
     // this.dingques_item[1].active = true;
@@ -147,7 +147,7 @@ export default class DingQueComponent extends cc.ScriptComponent {
     this.reset();
     //定缺tips重置为false
     for (let i = 0; i < this._dingqueTips.length; ++i) {
-      this._dingqueTips[i].enabled = false;
+      this._dingqueTips[i].active = false;
     }
   }
 
@@ -174,7 +174,7 @@ export default class DingQueComponent extends cc.ScriptComponent {
   reset() {
     this.setInteractable(true);
     for (var i = 0; i < this._queBtns.length; ++i) {
-      this._queBtns[i].enabled = true;
+      this._queBtns[i].active = true;
       let img = this._queBtns[i].parent.getComp('Image');
       if (img) {
         img.enabled = false;

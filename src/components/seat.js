@@ -182,10 +182,10 @@ export default class SeatComponent extends cc.ScriptComponent {
       pre = '';
     }
     if (id === 0) {
-      this._entity.enabled = false;
+      this._entity.active = false;
       // console.warn(' assign an empty player');
     } else {
-      this._entity.enabled = true;
+      this._entity.active = true;
     }
     // var idNode = this.node.getChildByName("id");
     // if (idNode) {

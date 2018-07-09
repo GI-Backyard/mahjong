@@ -20,8 +20,8 @@ export default class RoomControlComponent extends cc.ScriptComponent {
     let btn = this._menu.getComp('Button');
     if (btn) {
       btn._entity.on('clicked', () => {
-        let enabled = this._board.enabled;
-        this._board.enabled = !enabled;
+        let active = this._board.active;
+        this._board.active = !active;
       });
     }
 
@@ -30,7 +30,7 @@ export default class RoomControlComponent extends cc.ScriptComponent {
     if (btn) {
       btn._entity.on('clicked', () => {
         this.onBtnBackClicked();
-        // this._alertBoard.enabled = true;
+        // this._alertBoard.active = true;
       });
     }
 
@@ -75,16 +75,16 @@ export default class RoomControlComponent extends cc.ScriptComponent {
   }
 
   closeAll() {
-    this._board.enabled = false;
-    this._alertBoard.enabled = false;
-    this._dissolveBoard.enabled = false;
+    this._board.active = false;
+    this._alertBoard.active = false;
+    this._dissolveBoard.active = false;
   }
 
   showDissolveNotice(data) {
     this.closeAll();
-    this._dissolveAgree.enabled = true;
-    this._dissolveReject.enabled = true;
-    this._dissolveBoard.enabled = true;
+    this._dissolveAgree.active = true;
+    this._dissolveReject.active = true;
+    this._dissolveBoard.active = true;
     this._endTime = Date.now() / 1000 + data.time;
     this._extraInfo = '';
     for (var i = 0; i < data.states.length; ++i) {
@@ -93,8 +93,8 @@ export default class RoomControlComponent extends cc.ScriptComponent {
       if (b) {
         this._extraInfo += name + " {同意}\n ";
         if (i == cc.vv.gameNetMgr.seatIndex) {
-          this._dissolveAgree.enabled = false;
-          this._dissolveReject.enabled = false;
+          this._dissolveAgree.active = false;
+          this._dissolveReject.active = false;
           // this._dissolveStringNotice.active = true;
         }
       } else {

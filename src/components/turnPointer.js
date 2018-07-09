@@ -29,7 +29,7 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
     });
     this.initRound();
     this._lastActiveTurn = this._defaultTurn;
-    this._defaultTurn.enabled = true;
+    this._defaultTurn.active = true;
     this.initPointer();
   }
 
@@ -78,12 +78,12 @@ export default class TurnPointerComponent extends cc.ScriptComponent {
   }
 
   selectPointer(index) {
-    this._lastActiveTurn.enabled = false;
+    this._lastActiveTurn.active = false;
     if (index === -1) {
-      this._defaultTurn.enabled = true;
+      this._defaultTurn.active = true;
       this._lastActiveTurn = this._defaultTurn;
     } else {
-      this._turnS[index].enabled = true;
+      this._turnS[index].active = true;
       this._lastActiveTurn = this._turnS[index];
     }
   }

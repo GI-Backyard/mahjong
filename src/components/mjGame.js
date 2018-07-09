@@ -75,9 +75,9 @@ export default class MJGameComponent extends cc.ScriptComponent {
     this._initView();
     this._registerEventHandlers();
 
-    this._main3D.enabled = true;
-    this._mainUI.enabled = true;
-    // this._waitingUI.enabled = true;
+    this._main3D.active = true;
+    this._mainUI.active = true;
+    // this._waitingUI.active = true;
     this._initRoomInfo();
     this._onGameBeign();
     // cc.vv.audioMgr.playBGM("bgFight.mp3");
@@ -165,9 +165,9 @@ export default class MJGameComponent extends cc.ScriptComponent {
       return;
     }
 
-    this._main3D.enabled = true;
-    this._mainUI.enabled = true;
-    // this._waitingUI.enabled = false;
+    this._main3D.active = true;
+    this._mainUI.active = true;
+    // this._waitingUI.active = false;
     this.initMahjongs();
     this._updateRoundInfo();
     var seats = cc.vv.gameNetMgr.seats;
@@ -320,9 +320,9 @@ export default class MJGameComponent extends cc.ScriptComponent {
     });
 
     this._registerSingleEventHandler(node, 'game_over', () => {
-      // this._waitingUI.enabled = true;
-      this._mainUI.enabled = true;
-      this._main3D.enabled = true;
+      // this._waitingUI.active = true;
+      this._mainUI.active = true;
+      this._main3D.active = true;
     });
 
     this._registerSingleEventHandler(node, 'game_num', () => {
@@ -349,23 +349,21 @@ export default class MJGameComponent extends cc.ScriptComponent {
       cc.vv.mahjongmgr.instantiateMjTile(pai, (err, entity) => {
         if (!err && entity) {
           // clear all children
-          entity.on('ready', () => {
-            let children = [];
-            for (let i = 0; i < sideHolds[13].children.length; ++i) {
-              children.push(sideHolds[13].children[i]);
-            }
-            for (let i = 0; i < children.length; ++i) {
-              children[i].setParent(null);
-            }
+          let children = [];
+          for (let i = 0; i < sideHolds[13].children.length; ++i) {
+            children.push(sideHolds[13].children[i]);
+          }
+          for (let i = 0; i < children.length; ++i) {
+            children[i].setParent(null);
+          }
 
-            entity.setParent(sideHolds[13]);
-            cc.math.quat.fromEuler(entity.lrot, -90, 0, 0);
-            // entity.lpos.x = entity.lpos.x;
-            sideHolds[13].enabled = false;
-            sideHolds[13].enabled = true;
-            entity.enabled = false;
-            entity.enabled = true;
-          });
+          entity.setParent(sideHolds[13]);
+          cc.math.quat.fromEuler(entity.lrot, -90, 0, 0);
+          // entity.lpos.x = entity.lpos.x;
+          sideHolds[13].active = false;
+          sideHolds[13].active = true;
+          entity.active = false;
+          entity.active = true;
         }
       });
     });
@@ -382,24 +380,22 @@ export default class MJGameComponent extends cc.ScriptComponent {
         // let en = this._myHolds[13];
         cc.vv.mahjongmgr.instantiateMjTile(pai, (err, entity) => {
           if (!err && entity) {
-            entity.on('ready', () => {
-              if (this._myHoldsPai[13].children.length === 1) {
-                let oldChild = this._myHoldsPai[13].children[0];
-                oldChild.setParent(null);
-              } else {
-                console.error('A fatal error for mopai exists!');
-              }
+            if (this._myHoldsPai[13].children.length === 1) {
+              let oldChild = this._myHoldsPai[13].children[0];
+              oldChild.setParent(null);
+            } else {
+              console.error('A fatal error for mopai exists!');
+            }
 
-              entity.setParent(this._myHoldsPai[13]);
-              this._myHoldsPai[13].enabled = false;
-              this._myHoldsPai[13].enabled = true;
-              entity.enabled = false;
-              entity.enabled = true;
-              if (this.checkQue(pai)) {
-                this._queIndices.push(13);
-                entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
-              }
-            });
+            entity.setParent(this._myHoldsPai[13]);
+            this._myHoldsPai[13].active = false;
+            this._myHoldsPai[13].active = true;
+            entity.active = false;
+            entity.active = true;
+            if (this.checkQue(pai)) {
+              this._queIndices.push(13);
+              entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
+            }
           }
         });
         // var sprite = self._myMJArr[index];
@@ -451,7 +447,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
 
   _updateRoundInfo() {
     let text = "" + cc.vv.gameNetMgr.numOfGames + "/" + cc.vv.gameNetMgr.maxNumOfGames + "局 " + "剩余" + cc.vv.gameNetMgr.numOfMJ + "张";
-    if(this._roundInfo) {
+    if (this._roundInfo) {
       this._roundInfo.text = text;
     }
   }
@@ -866,10 +862,10 @@ export default class MJGameComponent extends cc.ScriptComponent {
     // nc.scaleY = 1.0;
 
     if (pai == null) {
-      nc.enabled = false;
+      nc.active = false;
     }
     else if (pai >= 0) {
-      nc.enabled = true;
+      nc.active = true;
       console.error('init mopai tile not implemented');
       // nc.opacity = 255;
       // if (localIndex == 0) {
@@ -884,7 +880,7 @@ export default class MJGameComponent extends cc.ScriptComponent {
       // }
     }
     else if (pai != null) {
-      nc.enabled = true;
+      nc.active = true;
       console.error('init mopai blank tile not implemented');
       // var sprite = nc.getComponent(cc.Sprite);
       // todo empty tile
@@ -935,18 +931,16 @@ export default class MJGameComponent extends cc.ScriptComponent {
     }
     for (let i = 0; i < num; ++i) {
       // var idx = this.getMJIndex(side, i);
-      holdsPai[i].enabled = false;
+      holdsPai[i].active = false;
     }
     for (let i = num; i < holdsPai.length; ++i) {
       cc.vv.mahjongmgr.instantiateMjTile(0, (err, entity) => {
         if (!err && entity) {
-          entity.on('ready', () => {
-            entity.setParent(holdsPai[i]);
-            holdsPai[i].enabled = false;
-            holdsPai[i].enabled = true;
-            entity.enabled = false;
-            entity.enabled = true;
-          });
+          entity.setParent(holdsPai[i]);
+          holdsPai[i].active = false;
+          holdsPai[i].active = true;
+          entity.active = false;
+          entity.active = true;
         }
       });
     }
@@ -959,20 +953,18 @@ export default class MJGameComponent extends cc.ScriptComponent {
         var idx = i + num;
         cc.vv.mahjongmgr.instantiateMjTile(holds[i], (err, entity) => {
           if (!err && entity) {
-            entity.on('ready', () => {
-              entity.setParent(holdsPai[idx]);
-              holdsPai[idx].enabled = false;
-              holdsPai[idx].enabled = true;
-              entity.enabled = false;
-              entity.enabled = true;
-            });
+            entity.setParent(holdsPai[idx]);
+            holdsPai[idx].active = false;
+            holdsPai[idx].active = true;
+            entity.active = false;
+            entity.active = true;
           }
         });
       }
 
       if (holds.length + num == 13) {
         var lasetIdx = 13
-        holdsPai[lasetIdx].enabled = false;
+        holdsPai[lasetIdx].active = false;
       }
     }
   }
@@ -1136,19 +1128,17 @@ export default class MJGameComponent extends cc.ScriptComponent {
       let mjid = holds[i];
       cc.vv.mahjongmgr.instantiateMjTile(mjid, (err, entity) => {
         if (!err && entity) {
-          entity.on('ready', () => {
-            this._myHoldsPai[i + lackingNum].children.length = 0;
-            entity.setParent(this._myHoldsPai[i + lackingNum]);
-            this._myHoldsPai[i + lackingNum].enabled = false;
-            this._myHoldsPai[i + lackingNum].enabled = true;
-            entity.enabled = false;
-            entity.enabled = true;
+          this._myHoldsPai[i + lackingNum].children.length = 0;
+          entity.setParent(this._myHoldsPai[i + lackingNum]);
+          this._myHoldsPai[i + lackingNum].active = false;
+          this._myHoldsPai[i + lackingNum].active = true;
+          entity.active = false;
+          entity.active = true;
 
-            if (this.checkQue(mjid)) {
-              this._queIndices.push(i + lackingNum);
-              entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
-            }
-          });
+          if (this.checkQue(mjid)) {
+            this._queIndices.push(i + lackingNum);
+            entity.getComp('Model').material = cc.vv.mahjongmgr.getInactiveMtl();
+          }
         }
       });
       // var sprite = this._myMJArr[i + lackingNum];

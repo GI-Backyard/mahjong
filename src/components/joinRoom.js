@@ -47,13 +47,13 @@ export default class joinRoomComponent extends cc.ScriptComponent {
 
   openDiag() {
     if (this._diag) {
-      this._diag.enabled = true;
+      this._diag.active = true;
     }
   }
 
   closeDiag() {
     if (this._diag) {
-      this._diag.enabled = false;
+      this._diag.active = false;
     }
   }
 

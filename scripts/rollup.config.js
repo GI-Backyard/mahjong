@@ -8,7 +8,6 @@ let banner = `
 /*
  * ${pjson.name} v${pjson.version}
  * (c) ${new Date().getFullYear()} @cocos
- * Released under the MIT License.
  */
 `;
 

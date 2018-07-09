@@ -83,8 +83,8 @@ export default class RoomWaiting extends cc.ScriptComponent {
     let seatsIndices = ['me', 'right', 'top', 'left'];
     // let waitingSeats = app.find(this.waitingSeats);
     let gameSeats = this.mjGameSeats;
-    if (!gameSeats.enabled) {
-      gameSeats.enabled = true;
+    if (!gameSeats.active) {
+      gameSeats.active = true;
     }
 
     for (let index = 0; index < 4; ++index) {
@@ -104,11 +104,11 @@ export default class RoomWaiting extends cc.ScriptComponent {
       let que = data[i].dingque;
       if (que == null || que < 0 || que >= arr.length) {
         que = null;
-        // this._mjSeats.enabled = false;
+        // this._mjSeats.active = false;
       }
       else {
         que = arr[que];
-        // this._mjSeats.enabled = true;
+        // this._mjSeats.active = true;
       }
 
       let localIndex = cc.vv.gameNetMgr.getLocalIndex(i);
@@ -131,7 +131,7 @@ export default class RoomWaiting extends cc.ScriptComponent {
     let isZhuang = (seat.seatindex == cc.vv.gameNetMgr.button);
     // let seatNode = this._waitingSeats[index];
     // if (seat.userid !== 0) {
-    //   seatNode.enabled = true;
+    //   seatNode.active = true;
     //   let image = seatNode.getComp('Image');
     //   if (isOffline) {
     //     image.color = color4.new(0.2, 0.2, 0.2, 1.0);
@@ -139,7 +139,7 @@ export default class RoomWaiting extends cc.ScriptComponent {
     //     image.color = color4.new(1.0, 1.0, 1.0, 1.0);
     //   }
     // } else {
-    //   seatNode.enabled = false;
+    //   seatNode.active = false;
     // }
     // console.log("isOffline:" + isOffline);
 

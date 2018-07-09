@@ -18,17 +18,17 @@ export default class DemoPointerComponent extends cc.ScriptComponent {
     pointerArray.push(bei);
     pointerArray.push(xi);
     pointerArray.push(nan);
-    // kong.enabled = false;
+    // kong.active = false;
     let lastTurn = -1;
-    // pointerArray[lastTurn].enabled = true;
+    // pointerArray[lastTurn].active = true;
     let turnChange = () => {
       if (lastTurn !== -1) {
-        pointerArray[lastTurn].enabled = false;
+        pointerArray[lastTurn].active = false;
       } else {
-        kong.enabled = false;
+        kong.active = false;
       }
       lastTurn = (lastTurn + 1) % pointerArray.length;
-      pointerArray[lastTurn].enabled = true;
+      pointerArray[lastTurn].active = true;
       setTimeout(turnChange, 2000);
     }
     setTimeout(turnChange, 2000);

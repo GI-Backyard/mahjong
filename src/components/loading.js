@@ -19,7 +19,7 @@ export default class LoadingComponent extends cc.ScriptComponent {
   start() {
     let app = this._app;
     this._canvans = app.find('loading_canvas');
-    this._canvans.enabled = true;
+    this._canvans.active = true;
     this.updateLoadingProgress();
     let textNode = app.find('Text', this._canvans);
     this._loadingProgressText = textNode && textNode.getComp('Text');
@@ -35,10 +35,10 @@ export default class LoadingComponent extends cc.ScriptComponent {
     this._lastTime = time;
     this.updateLoadingProgress();
     if (this._accTime >= this._loadingTime) {
-      this._entity.enabled = false;
-      this._canvans.enabled = false;
+      this._entity.active = false;
+      this._canvans.active = false;
       console.log('Loading Complete, to Login');
-      this._loginNode.enabled = true;
+      this._loginNode.active = true;
     }
   }
 }

@@ -11,13 +11,13 @@ export default class HallComponent extends cc.ScriptComponent {
     let en = this.createRoomBtn;
     let btn = en && en.getComp('Button');
     btn._entity.on('clicked',() => {
-      this._createRoomDiag.enabled = true;
+      this._createRoomDiag.active = true;
     });
 
     en = this.joinRoomBtn;
     btn = en && en.getComp('Button');
     btn._entity.on('clicked',() => {
-      this._joinRoomDiag.enabled = true;
+      this._joinRoomDiag.active = true;
     });
 
     en = this.matchBtn;

@@ -23,8 +23,8 @@ export default class StartComponent extends cc.ScriptComponent {
           else {
             cc.vv.SI = ret;
             updateStatusInfo('Connection Successed');
-            this._loadingNode.enabled = true;
-            this._canvas.enabled = false;
+            this._loadingNode.active = true;
+            this._canvas.active = false;
             console.log('Loading Process!');
           }
         });
@@ -45,16 +45,16 @@ export default class StartComponent extends cc.ScriptComponent {
     this._loadingNode = app.find('logic/loading');
 
     setTimeout(() => {
-      this._logo.enabled = true;
-      this._notice.enabled = false;
-      this._splash.enabled = false;
+      this._logo.active = true;
+      this._notice.active = false;
+      this._splash.active = false;
       setTimeout(() => {
-        this._logo.enabled = false;
-        this._notice.enabled = true;
+        this._logo.active = false;
+        this._notice.active = true;
         setTimeout(() => {
-          this._notice.enabled = false;
-          this._splash.enabled = true;
-          this._canvas.enabled = true;
+          this._notice.active = false;
+          this._splash.active = true;
+          this._canvas.active = true;
           this.getServerInfo();
         }, 1000);
       }, 1000);
